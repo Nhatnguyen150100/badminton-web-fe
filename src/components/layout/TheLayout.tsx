@@ -1,15 +1,11 @@
-import React from 'react';
 import TheHeader from './TheHeader';
+import { Outlet } from 'react-router-dom';
 
-interface IProps {
-  children: React.ReactNode;
-}
-
-export default function TheLayout({ children }: IProps) {
+export default function TheLayout() {
   return (
     <>
       <TheHeader />
-      {children}
+      <Outlet />
     </>
   );
 }

@@ -24,10 +24,8 @@ export default function TheHeader() {
     dispatch(
       setUser({
         id: '',
-        userName: null,
         fullName: null,
         gender: null,
-        birthDay: null,
         phoneNumber: null,
         email: '',
         role: 'USER',

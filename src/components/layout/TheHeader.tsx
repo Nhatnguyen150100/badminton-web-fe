@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../lib/store';
 import { Avatar, Button, Divider, Popover } from 'antd';
 import {
+  InfoCircleOutlined,
   LogoutOutlined,
   ProfileOutlined,
   UserOutlined,
@@ -16,11 +17,17 @@ import ModalRegister from '../../modules/auth/register/ModalRegister';
 import { setModalActive } from '../../lib/reducer/generalSlice';
 import DEFINE_MODAL_NAME from '../../constants/modal-name';
 import { IGeneral } from '../../types/general.types';
+import { toast } from 'react-toastify';
 
 export default function TheHeader() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  
+  const isUpdatedInfoUser = useMemo(() => {
+    return Boolean(user.fullName && user.gender && user.phoneNumber);
+  }, [user])
+  console.log("🚀 ~ isUpdatedInfoUser ~ isUpdatedInfoUser:", isUpdatedInfoUser)
 
   const isLoggedIn = useMemo(() => user.id, [user]);
 
@@ -62,10 +69,31 @@ export default function TheHeader() {
             variant="text"
             color="default"
             className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
+            onClick={() => {
+              
+              console.log("🚀 ~ contentPopover ~ isUpdatedInfoUser:", isUpdatedInfoUser)
+              if (isUpdatedInfoUser)
+                navigate(DEFINE_ROUTERS_USER.createCourt);
+              else {
+                toast.error(
+                  'Hãy cập nhật thông tin cá nhân trước khi tạo bài đăng',
+                );
+                if (location.pathname !== DEFINE_ROUTERS_USER.profile)
+                  navigate(DEFINE_ROUTERS_USER.profile);
+              }
+            }}
+          >
+            <InfoCircleOutlined /> Đăng tin thuê sân
+          </Button>
+          <Divider variant="solid" className="my-2" />
+          <Button
+            variant="text"
+            color="default"
+            className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
             onClick={handleLogout}
           >
             <LogoutOutlined />
-            Logout
+            Đăng xuất
           </Button>
         </div>
       </>
@@ -92,7 +120,11 @@ export default function TheHeader() {
                     variant="text"
                     color="default"
                     onClick={() => {
-                      dispatch(setModalActive(DEFINE_MODAL_NAME.LOGIN_MODAL as IGeneral))
+                      dispatch(
+                        setModalActive(
+                          DEFINE_MODAL_NAME.LOGIN_MODAL as IGeneral,
+                        ),
+                      );
                     }}
                     className="hover:cursor-pointer !text-white font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5"
                   >
@@ -102,7 +134,11 @@ export default function TheHeader() {
                     variant="text"
                     color="default"
                     onClick={() => {
-                      dispatch(setModalActive(DEFINE_MODAL_NAME.REGISTER_MODAL as IGeneral))
+                      dispatch(
+                        setModalActive(
+                          DEFINE_MODAL_NAME.REGISTER_MODAL as IGeneral,
+                        ),
+                      );
                     }}
                     className="hover:cursor-pointer !text-white font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5"
                   >
@@ -116,11 +152,13 @@ export default function TheHeader() {
               <Popover content={contentPopover} trigger="click">
                 <a className="hover:cursor-pointer text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-1 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
                   <Avatar
-                  size={50}
-                    crossOrigin='anonymous'
+                    size={50}
+                    crossOrigin="anonymous"
                     className="me-3"
                     src={user.avatar}
-                    style={{ backgroundColor: `${user.avatar ? 'none' : '#00aaff'}` }}
+                    style={{
+                      backgroundColor: `${user.avatar ? 'none' : '#00aaff'}`,
+                    }}
                     icon={<UserOutlined />}
                   />
                   {user.fullName ?? user.email}

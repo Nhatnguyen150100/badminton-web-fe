@@ -85,7 +85,7 @@ export default function Profile() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Full name"
+          label="Tên đầy đủ"
           name="fullName"
           rules={[{ required: true, message: 'Please input full name' }]}
         >
@@ -93,18 +93,18 @@ export default function Profile() {
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Gender"
+          label="Giới tính"
           name="gender"
           rules={[{ required: true, message: 'Please input gender' }]}
         >
           <Radio.Group>
-            <Radio value={'Male'}>Male</Radio>
-            <Radio value={'Female'}>Female</Radio>
+            <Radio value={'Male'}>Nam</Radio>
+            <Radio value={'Female'}>Nữ</Radio>
           </Radio.Group>
         </Form.Item>
 
         <Form.Item<FieldType>
-          label="Phone number"
+          label="Số điện thoại"
           name="phoneNumber"
           rules={[{ required: true, message: 'Please input phone number' }]}
         >

@@ -4,6 +4,7 @@ import TheLayout from '../components/layout/TheLayout';
 import ListBadmintonCourtPost from '../modules/user/list-badminton-court-post/ListBadmintonCourtPost';
 import { DEFINE_ROUTERS_USER } from '../constants/routers-mapper';
 import Profile from '../modules/user/profile/Profile';
+import BadmintonCourtRoot from '../modules/user/badminton-court-manager/BadmintonCourtRoot';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: DEFINE_ROUTERS_USER.profile,
         element: <Profile />,
+      },
+      {
+        path: DEFINE_ROUTERS_USER.createCourt,
+        element: <BadmintonCourtRoot />,
       }
     ],
   },

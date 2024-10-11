@@ -84,7 +84,7 @@ export default function ModalRegister() {
               }));
             }}
           ></Input>
-          <Input
+          <Input.Password
             type="password"
             placeholder="Password"
             className="mb-4"
@@ -95,8 +95,8 @@ export default function ModalRegister() {
                 password: e.target.value,
               }));
             }}
-          ></Input>
-          <Input
+          ></Input.Password>
+          <Input.Password
             type="password"
             placeholder="Confirm Password"
             className="mb-4"
@@ -107,7 +107,7 @@ export default function ModalRegister() {
                 confirmPassword: e.target.value,
               }));
             }}
-          ></Input>
+          ></Input.Password>
           <div className="mb-5 pb-1 pt-1 text-center">
             <button
               disabled={loading}

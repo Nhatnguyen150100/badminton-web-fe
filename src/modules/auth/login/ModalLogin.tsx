@@ -81,7 +81,7 @@ export default function ModalLogin() {
               }));
             }}
           ></Input>
-          <Input
+          <Input.Password
             type="password"
             placeholder="Password"
             className="mb-4"
@@ -92,7 +92,7 @@ export default function ModalLogin() {
                 password: e.target.value,
               }));
             }}
-          ></Input>
+          ></Input.Password>
           <div className="mb-5 pb-1 pt-1 text-center">
             <button
               disabled={loading}

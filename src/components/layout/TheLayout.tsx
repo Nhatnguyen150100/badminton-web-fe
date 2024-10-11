@@ -5,7 +5,9 @@ export default function TheLayout() {
   return (
     <>
       <TheHeader />
-      <Outlet />
+      <div className="container py-10">
+        <Outlet />
+      </div>
     </>
   );
 }

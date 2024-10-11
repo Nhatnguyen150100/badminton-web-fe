@@ -1,21 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { IGeneral } from '../../types/general.types';
 
 export interface CounterState {
-  value: Record<string, any>;
+  modalActive: IGeneral
 }
 
 const initialState: CounterState = {
-  value: {},
+  modalActive: null
 };
 
 export const generalSlice = createSlice({
-  name: 'counter',
+  name: 'general',
   initialState,
   reducers: {
-    // set: (state) => {
-    //   state.value += 1
-    // },
+    setModalActive: (state, action: PayloadAction<IGeneral>) => {
+      state.modalActive = action.payload;
+    },
     // decrement: (state) => {
     //   state.value -= 1
     // },
@@ -26,7 +27,7 @@ export const generalSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {} = generalSlice.actions;
+export const { setModalActive } = generalSlice.actions;
 
 const generalReducer = generalSlice.reducer;
 

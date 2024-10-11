@@ -9,15 +9,22 @@ import {
 } from '@ant-design/icons';
 import { setUser } from '../../lib/reducer/userSlice';
 import { Link, useLocation, useNavigate, useRoutes } from 'react-router-dom';
-import DEFINE_ROUTERS, {
-  DEFINE_LIST_ROUTES_USER,
-} from '../../constants/routers-mapper';
 import isChildUrl from '../../utils/functions/check-active-router';
+import { DEFINE_ROUTERS_USER } from '../../constants/routers-mapper';
+import Visibility from '../base/visibility';
+import ModalLogin from '../../modules/auth/login/ModalLogin';
+import ModalRegister from '../../modules/auth/register/ModalRegister';
+import { setModalActive } from '../../lib/reducer/generalSlice';
+import DEFINE_MODAL_NAME from '../../constants/modal-name';
+import { IGeneral } from '../../types/general.types';
 
 export default function TheHeader() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+
+  const isLoggedIn = useMemo(() => user.id, [user]);
+
   const location = useLocation();
 
   const handleLogout = () => {
@@ -33,7 +40,6 @@ export default function TheHeader() {
         updatedAt: '',
       }),
     );
-    navigate(DEFINE_ROUTERS.auth.login);
   };
 
   const contentPopover = useMemo((): React.ReactNode => {
@@ -44,7 +50,6 @@ export default function TheHeader() {
             variant="text"
             color="default"
             className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
-            onClick={() => navigate(DEFINE_ROUTERS.profile)}
           >
             <ProfileOutlined /> Profile
           </Button>
@@ -65,29 +70,56 @@ export default function TheHeader() {
 
   return (
     <header>
-      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-4 dark:bg-gray-800">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <a href={DEFINE_ROUTERS.home} className="flex items-center">
-            <img
-              src="https://flowbite.com/docs/images/logo.svg"
-              className="mr-3 h-6 sm:h-9"
-              alt="Flowbite Logo"
-            />
+          <a href={DEFINE_ROUTERS_USER.home} className="flex items-center">
+            <img src="/logo.png" className="mr-3 h-6 sm:h-9" alt="Logo" />
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              KanjiWeb
+              Web cầu lông
             </span>
           </a>
           <div className="flex items-center lg:order-2">
-            <Popover content={contentPopover} trigger="click">
-              <a className="hover:cursor-pointer text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
-                <Avatar
-                  className="me-3"
-                  style={{ backgroundColor: '#00aaff' }}
-                  icon={<UserOutlined />}
-                />
-                {user.fullName ?? user.email}
-              </a>
-            </Popover>
+            <Visibility
+              visibility={Boolean(isLoggedIn)}
+              suspenseComponent={
+                <div className="!text-white flex flex-row justify-start items-center">
+                  <UserOutlined />
+                  <Button
+                    variant="text"
+                    color="default"
+                    onClick={() => {
+                      dispatch(setModalActive(DEFINE_MODAL_NAME.LOGIN_MODAL as IGeneral))
+                    }}
+                    className="hover:cursor-pointer !text-white font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5"
+                  >
+                    Đăng nhập
+                  </Button>
+                  <Button
+                    variant="text"
+                    color="default"
+                    onClick={() => {
+                      dispatch(setModalActive(DEFINE_MODAL_NAME.REGISTER_MODAL as IGeneral))
+                    }}
+                    className="hover:cursor-pointer !text-white font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5"
+                  >
+                    Đăng kí
+                  </Button>
+                  <ModalLogin />
+                  <ModalRegister />
+                </div>
+              }
+            >
+              <Popover content={contentPopover} trigger="click">
+                <a className="hover:cursor-pointer text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                  <Avatar
+                    className="me-3"
+                    style={{ backgroundColor: '#00aaff' }}
+                    icon={<UserOutlined />}
+                  />
+                  {user.fullName ?? user.email}
+                </a>
+              </Popover>
+            </Visibility>
             <button
               data-collapse-toggle="mobile-menu-2"
               type="button"
@@ -129,64 +161,30 @@ export default function TheHeader() {
             id="mobile-menu-2"
           >
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-              {Object.values(DEFINE_LIST_ROUTES_USER).map((item) => {
-                if (item?.subRoutes.length > 0) {
-                  return (
-                    <Popover
-                      key={item.name}
-                      content={
-                        <div className="flex flex-col justify-start items-center min-w-[80px]">
-                          {item?.subRoutes.map((subRoute) => (
-                            <Button
-                              key={subRoute.name}
-                              variant="text"
-                              color={`${
-                                isChildUrl(subRoute.route, location.pathname)
-                                  ? 'primary'
-                                  : 'default'
-                              }`}
-                              className="text-md text-gray-800 w-full flex justify-center font-medium border-none"
-                            >
-                              <Link to={subRoute.route}>{subRoute.name}</Link>
-                            </Button>
-                          ))}
-                        </div>
-                      }
-                      forceRender
-                      trigger="click"
-                    >
-                      <li key={item.name}>
-                        <Link
-                          to={item.route}
-                          className={`block py-2 px-4 mx-8 text-base font-medium text-gray-800 border-b border-gray-100 hover:bg-gray-50 ${
-                            item.subRoutes.some((route) =>
-                              isChildUrl(route.route, location.pathname),
-                            )
-                              ? '!text-white font-bold'
-                              : ''
-                          } lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700`}
-                        >
-                          {item.name}
-                        </Link>
-                      </li>
-                    </Popover>
-                  );
-                }
-                return (
-                  <li key={item.name}>
-                    <Link
-                      to={item.route}
-                      className={`block py-2 px-4 mx-8 text-base font-medium text-gray-800 border-b border-gray-100 hover:bg-gray-50 ${
-                        item.route === location.pathname
-                          ? '!text-white font-bold'
-                          : ''
-                      } lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700`}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                );
-              })}
+              <li>
+                <Link
+                  to={DEFINE_ROUTERS_USER.home}
+                  className={`block py-2 px-4 mx-8 text-base font-medium text-gray-800 border-b border-gray-100 hover:bg-gray-50 ${
+                    DEFINE_ROUTERS_USER.home === location.pathname
+                      ? '!text-white font-bold'
+                      : ''
+                  } lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700`}
+                >
+                  Tìm sân đấu
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={DEFINE_ROUTERS_USER.listPostBooking}
+                  className={`block py-2 px-4 mx-8 text-base font-medium text-gray-800 border-b border-gray-100 hover:bg-gray-50 ${
+                    DEFINE_ROUTERS_USER.listPostBooking === location.pathname
+                      ? '!text-white font-bold'
+                      : ''
+                  } lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700`}
+                >
+                  Tìm giao lưu
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

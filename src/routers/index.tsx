@@ -1,14 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
 import ErrorPage from '../pages/not-found';
-import DEFINE_ROUTERS from '../constants/routers-mapper';
-import LoginPage from '../modules/auth/login';
-import RegisterPage from '../modules/auth/register';
 import TheLayout from '../components/layout/TheLayout';
 import ListBadmintonCourtPost from '../modules/user/list-badminton-court-post/ListBadmintonCourtPost';
+import { DEFINE_ROUTERS_USER } from '../constants/routers-mapper';
 
 const router = createBrowserRouter([
   {
-    path: DEFINE_ROUTERS.home,
+    path: DEFINE_ROUTERS_USER.home,
     errorElement: <ErrorPage />,
     Component: TheLayout,
     children: [
@@ -18,14 +16,6 @@ const router = createBrowserRouter([
         element: <ListBadmintonCourtPost />,
       },
     ],
-  },
-  {
-    path: DEFINE_ROUTERS.auth.login,
-    element: <LoginPage />,
-  },
-  {
-    path: DEFINE_ROUTERS.auth.register,
-    element: <RegisterPage />,
   },
 ]);
 

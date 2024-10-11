@@ -7,10 +7,9 @@ export interface ILogin {
 
 export interface IResponseLogin {
   id: string;
-  userName: null;
   fullName: null;
   gender: null;
-  birthDay: null;
+  avatar: string;
   phoneNumber: null;
   email: string;
   role: IRole;

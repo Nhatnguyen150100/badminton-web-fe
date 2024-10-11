@@ -8,8 +8,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { setUser } from '../../lib/reducer/userSlice';
-import { Link, useLocation, useNavigate, useRoutes } from 'react-router-dom';
-import isChildUrl from '../../utils/functions/check-active-router';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { DEFINE_ROUTERS_USER } from '../../constants/routers-mapper';
 import Visibility from '../base/visibility';
 import ModalLogin from '../../modules/auth/login/ModalLogin';
@@ -33,6 +32,7 @@ export default function TheHeader() {
         id: '',
         fullName: null,
         gender: null,
+        avatar: null,
         phoneNumber: null,
         email: '',
         role: 'USER',
@@ -40,6 +40,7 @@ export default function TheHeader() {
         updatedAt: '',
       }),
     );
+    navigate(DEFINE_ROUTERS_USER.home);
   };
 
   const contentPopover = useMemo((): React.ReactNode => {
@@ -50,8 +51,11 @@ export default function TheHeader() {
             variant="text"
             color="default"
             className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
+            onClick={() => {
+              navigate(DEFINE_ROUTERS_USER.profile);
+            }}
           >
-            <ProfileOutlined /> Profile
+            <ProfileOutlined /> Thông tin người dùng
           </Button>
           <Divider variant="solid" className="my-2" />
           <Button
@@ -111,9 +115,14 @@ export default function TheHeader() {
             >
               <Popover content={contentPopover} trigger="click">
                 <a className="hover:cursor-pointer text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                  {/* <Visibility visibility={user.avatar}>
+                    
+                  </Visibility> */}
                   <Avatar
+                    crossOrigin='anonymous'
                     className="me-3"
-                    style={{ backgroundColor: '#00aaff' }}
+                    src={user.avatar}
+                    style={{ backgroundColor: `${user.avatar ? 'none' : '#00aaff'}` }}
                     icon={<UserOutlined />}
                   />
                   {user.fullName ?? user.email}

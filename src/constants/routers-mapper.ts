@@ -5,6 +5,7 @@ const DEFINE_ROUTERS_ADMIN = {
 
 const DEFINE_ROUTERS_USER = {
   home: '/',
+  profile: '/profile',
   listPostBooking: '/booking'
 };
 

@@ -35,7 +35,7 @@ export default function ModalLogin() {
       });
       cookiesStore.set('access_token', rs.data.accessToken);
       dispatch(setUser(rs.data));
-      console.log(cookiesStore.get('access_token'));
+      toast.success(rs.message);
     } finally {
       setLoading(false);
     }

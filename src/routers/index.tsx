@@ -3,6 +3,7 @@ import ErrorPage from '../pages/not-found';
 import TheLayout from '../components/layout/TheLayout';
 import ListBadmintonCourtPost from '../modules/user/list-badminton-court-post/ListBadmintonCourtPost';
 import { DEFINE_ROUTERS_USER } from '../constants/routers-mapper';
+import Profile from '../modules/user/profile/Profile';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
         path: '',
         element: <ListBadmintonCourtPost />,
       },
+      {
+        path: DEFINE_ROUTERS_USER.profile,
+        element: <Profile />,
+      }
     ],
   },
 ]);

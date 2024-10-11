@@ -36,12 +36,18 @@ export default function ModalRegister() {
         password: form.password,
       });
       toast.success(rs.message);
+      handleLogin();
     } finally {
       setLoading(false);
     }
   };
 
   const handleClose = () => {
+    setForm({
+      email: '',
+      password: '',
+      confirmPassword: '',
+    });
     dispatch(setModalActive(null));
   };
 
@@ -56,6 +62,7 @@ export default function ModalRegister() {
         centered
         footer={null}
         open={modalActive === DEFINE_MODAL_NAME.REGISTER_MODAL}
+        destroyOnClose
         onCancel={handleClose}
       >
         <div className="text-center space-y-3 mb-4">

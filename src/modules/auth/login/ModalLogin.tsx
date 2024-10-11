@@ -42,6 +42,10 @@ export default function ModalLogin() {
   };
 
   const handleClose = () => {
+    setForm({
+      email: '',
+      password: '',
+    });
     dispatch(setModalActive(null));
   };
 

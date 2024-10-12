@@ -24,10 +24,6 @@ export default function TheHeader() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
 
-  const isUpdatedInfoUser = useMemo(() => {
-    return Boolean(user.fullName && user.gender && user.phoneNumber);
-  }, [user]);
-
   const isLoggedIn = useMemo(() => user.id, [user]);
 
   const location = useLocation();
@@ -51,13 +47,7 @@ export default function TheHeader() {
   };
 
   const handleNavigateBadmintonCourt = () => {
-    console.log('🚀 ~ contentPopover ~ isUpdatedInfoUser:', user);
-    if (isUpdatedInfoUser) navigate(DEFINE_ROUTERS_USER.createCourt);
-    else {
-      toast.error('Hãy cập nhật thông tin cá nhân trước khi tạo bài đăng');
-      if (location.pathname !== DEFINE_ROUTERS_USER.profile)
-        navigate(DEFINE_ROUTERS_USER.profile);
-    }
+    navigate(DEFINE_ROUTERS_USER.createCourt);
   };
 
   const contentPopover = useMemo((): React.ReactNode => {

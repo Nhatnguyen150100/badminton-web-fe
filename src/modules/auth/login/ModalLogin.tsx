@@ -1,5 +1,4 @@
 import { Button, Input, Modal } from 'antd';
-import LoginPage from '.';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -36,6 +35,7 @@ export default function ModalLogin() {
       cookiesStore.set('access_token', rs.data.accessToken);
       dispatch(setUser(rs.data));
       toast.success(rs.message);
+      dispatch(setModalActive(null));
     } finally {
       setLoading(false);
     }

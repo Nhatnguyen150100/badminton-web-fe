@@ -23,11 +23,10 @@ export default function TheHeader() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
-  
+
   const isUpdatedInfoUser = useMemo(() => {
     return Boolean(user.fullName && user.gender && user.phoneNumber);
-  }, [user])
-  console.log("🚀 ~ isUpdatedInfoUser ~ isUpdatedInfoUser:", isUpdatedInfoUser)
+  }, [user]);
 
   const isLoggedIn = useMemo(() => user.id, [user]);
 
@@ -48,6 +47,17 @@ export default function TheHeader() {
       }),
     );
     navigate(DEFINE_ROUTERS_USER.home);
+    dispatch(setModalActive(DEFINE_MODAL_NAME.LOGIN_MODAL as IGeneral));
+  };
+
+  const handleNavigateBadmintonCourt = () => {
+    console.log('🚀 ~ contentPopover ~ isUpdatedInfoUser:', user);
+    if (isUpdatedInfoUser) navigate(DEFINE_ROUTERS_USER.createCourt);
+    else {
+      toast.error('Hãy cập nhật thông tin cá nhân trước khi tạo bài đăng');
+      if (location.pathname !== DEFINE_ROUTERS_USER.profile)
+        navigate(DEFINE_ROUTERS_USER.profile);
+    }
   };
 
   const contentPopover = useMemo((): React.ReactNode => {
@@ -69,19 +79,7 @@ export default function TheHeader() {
             variant="text"
             color="default"
             className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
-            onClick={() => {
-              
-              console.log("🚀 ~ contentPopover ~ isUpdatedInfoUser:", isUpdatedInfoUser)
-              if (isUpdatedInfoUser)
-                navigate(DEFINE_ROUTERS_USER.createCourt);
-              else {
-                toast.error(
-                  'Hãy cập nhật thông tin cá nhân trước khi tạo bài đăng',
-                );
-                if (location.pathname !== DEFINE_ROUTERS_USER.profile)
-                  navigate(DEFINE_ROUTERS_USER.profile);
-              }
-            }}
+            onClick={handleNavigateBadmintonCourt}
           >
             <InfoCircleOutlined /> Đăng tin thuê sân
           </Button>
@@ -102,6 +100,8 @@ export default function TheHeader() {
 
   return (
     <header>
+      <ModalLogin />
+      <ModalRegister />
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-4 dark:bg-gray-800">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <a href={DEFINE_ROUTERS_USER.home} className="flex items-center">
@@ -144,8 +144,6 @@ export default function TheHeader() {
                   >
                     Đăng kí
                   </Button>
-                  <ModalLogin />
-                  <ModalRegister />
                 </div>
               }
             >

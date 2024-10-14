@@ -1,24 +1,10 @@
-import { Tabs, TabsProps } from 'antd';
+import { Breadcrumb, Tabs, TabsProps } from 'antd';
 import * as React from 'react'
 import CreateBadmintonCourt from './CreateBadmintonCourt';
-
-const items: TabsProps['items'] = [
-  {
-    key: '1',
-    label: 'Quản lý thông tin sân cầu lông',
-    children: <CreateBadmintonCourt />,
-  },
-  // {
-  //   key: '2',
-  //   label: 'Learn progress',
-  //   children: <ProcessTest />,
-  // },
-];
-
 export default function BadmintonCourtRoot() {
   return (
-    <div className="w-full">
-      <Tabs defaultActiveKey="1" items={items} />
+    <div className="w-full space-y-5">
+      <h1 className='text-center font-bold text-xl'>Danh sách thông tin các sân cầu</h1>
     </div>
   )
 }

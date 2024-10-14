@@ -17,7 +17,6 @@ import ModalRegister from '../../modules/auth/register/ModalRegister';
 import { setModalActive } from '../../lib/reducer/generalSlice';
 import DEFINE_MODAL_NAME from '../../constants/modal-name';
 import { IGeneral } from '../../types/general.types';
-import { toast } from 'react-toastify';
 
 export default function TheHeader() {
   const navigate = useNavigate();

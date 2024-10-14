@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../lib/store';
+import { IRootState } from '../../lib/store';
 import { Avatar, Button, Divider, Popover } from 'antd';
 import {
   InfoCircleOutlined,
@@ -21,7 +21,7 @@ import { IGeneral } from '../../types/general.types';
 export default function TheHeader() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: IRootState) => state.user);
 
   const isLoggedIn = useMemo(() => user.id, [user]);
 

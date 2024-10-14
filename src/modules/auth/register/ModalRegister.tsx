@@ -5,12 +5,12 @@ import { authService } from '../../../services';
 import { useDispatch, useSelector } from 'react-redux';
 import { setModalActive } from '../../../lib/reducer/generalSlice';
 import DEFINE_MODAL_NAME from '../../../constants/modal-name';
-import { RootState } from '../../../lib/store';
+import { IRootState } from '../../../lib/store';
 import { IGeneral } from '../../../types/general.types';
 
 export default function ModalRegister() {
   const modalActive = useSelector(
-    (state: RootState) => state.general.modalActive,
+    (state: IRootState) => state.general.modalActive,
   );
   const dispatch = useDispatch();
   const [form, setForm] = React.useState({

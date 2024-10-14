@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../lib/store';
+import { IRootState } from '../../../lib/store';
 import { Button, DatePicker, Form, FormProps, Input, Radio } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import GeneralLoading from '../../../components/base/GeneralLoading';
@@ -20,7 +20,7 @@ type FieldType = {
 export default function Profile() {
   const [file, setFile] = React.useState<File>();
   const [form] = Form.useForm();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: IRootState) => state.user);
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
   const [currentAvatar, setCurrentAvatar] = React.useState<string | null>(user?.avatar);

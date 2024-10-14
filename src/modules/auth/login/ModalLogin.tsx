@@ -5,14 +5,14 @@ import { toast } from 'react-toastify';
 import { authService } from '../../../services';
 import cookiesStore from '../../../plugins/cookiesStore';
 import { setUser } from '../../../lib/reducer/userSlice';
-import { RootState } from '../../../lib/store';
+import { IRootState } from '../../../lib/store';
 import DEFINE_MODAL_NAME from '../../../constants/modal-name';
 import { setModalActive } from '../../../lib/reducer/generalSlice';
 import { IGeneral } from '../../../types/general.types';
 
 export default function ModalLogin() {
   const modalActive = useSelector(
-    (state: RootState) => state.general.modalActive,
+    (state: IRootState) => state.general.modalActive,
   );
   const dispatch = useDispatch();
   const [form, setForm] = React.useState({

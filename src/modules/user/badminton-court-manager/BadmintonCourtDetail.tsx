@@ -23,7 +23,7 @@ export default function BadmintonCourtDetail() {
     <div className="w-full space-y-5">
       <Breadcrumb>
         <Breadcrumb.Item>
-          <Link to={DEFINE_ROUTERS_USER.createCourt}>Danh sách sân</Link>
+          <Link to={DEFINE_ROUTERS_USER.badmintonCourtManager}>Danh sách sân</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>Quản lý sân cầu lông</Breadcrumb.Item>
       </Breadcrumb>

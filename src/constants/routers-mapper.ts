@@ -6,7 +6,7 @@ const DEFINE_ROUTERS_ADMIN = {
 const DEFINE_ROUTERS_USER = {
   home: '/',
   profile: '/profile',
-  createCourt: '/create-court',
+  badmintonCourtManager: '/badminton-court-manager',
   listPostBooking: '/booking'
 };
 

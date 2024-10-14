@@ -46,7 +46,7 @@ export default function TheHeader() {
   };
 
   const handleNavigateBadmintonCourt = () => {
-    navigate(DEFINE_ROUTERS_USER.createCourt);
+    navigate(DEFINE_ROUTERS_USER.badmintonCourtManager);
   };
 
   const contentPopover = useMemo((): React.ReactNode => {

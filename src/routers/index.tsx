@@ -22,7 +22,7 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: DEFINE_ROUTERS_USER.createCourt,
+        path: DEFINE_ROUTERS_USER.badmintonCourtManager,
         element: <BadmintonCourtRoot />,
       }
     ],

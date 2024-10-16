@@ -25,7 +25,7 @@ const BaseSearch: React.FC<SearchInputProps> = ({
           type="text"
           placeholder={placeholder}
           value={value}
-          onChange={(e) => onHandleChange(e.target.value)}
+          onChange={(e) => onHandleChange(e.target.value.trim())}
           onKeyPress={(e) => {
             if (e.key === 'Enter') {
               onSearch();

@@ -24,7 +24,10 @@ type FieldType = {
   description?: string;
 };
 
-export default function CreateOrEditCourtInfo({ badmintonCourt, handleSubmit }: IProps) {
+export default function CreateOrEditCourtInfo({
+  badmintonCourt,
+  handleSubmit,
+}: IProps) {
   const user = useSelector((state: IRootState) => state.user);
   const [file, setFile] = React.useState<File>();
   const [location, setLocation] = React.useState<ILatLng>({
@@ -81,62 +84,73 @@ export default function CreateOrEditCourtInfo({ badmintonCourt, handleSubmit }: 
         }}
         autoComplete="off"
       >
-        <Form.Item<FieldType>
-          label="Tên sân"
-          name="name"
-          rules={[{ required: true, message: 'Hãy nhập tên sân cầu' }]}
-        >
-          <Input size="large" />
-        </Form.Item>
+        <div className="grid grid-cols-2 gap-x-4">
+          <div>
+            <Form.Item<FieldType>
+              label="Tên sân"
+              name="name"
+              rules={[{ required: true, message: 'Hãy nhập tên sân cầu' }]}
+            >
+              <Input size="large" />
+            </Form.Item>
 
-        <Form.Item<any>
-          label={
-            <div className="text-sm space-x-2">
-              <span className="text-red-500">*</span>
-              <span>Ảnh của sân</span>
-            </div>
-          }
-        >
-          <ImgUpload
-            imgProps={badmintonCourt?.imageCourt ?? null}
-            file={file}
-            handleUploadFile={handleUploadFile}
-          />
-        </Form.Item>
+            <Form.Item<FieldType>
+              label="Quận/huyện"
+              name="district"
+              rules={[{ required: true, message: 'Hãy nhập tên quận/huyện' }]}
+            >
+              <Input />
+            </Form.Item>
 
-        <Form.Item<FieldType>
-          label="Quận/huyện"
-          name="district"
-          rules={[{ required: true, message: 'Hãy nhập tên quận/huyện' }]}
-        >
-          <Input />
-        </Form.Item>
+            <Form.Item<FieldType>
+              label="Phường/xã"
+              name="ward"
+              rules={[{ required: true, message: 'Hãy nhập tên phường/xã' }]}
+            >
+              <Input />
+            </Form.Item>
 
-        <Form.Item<FieldType>
-          label="Phường/xã"
-          name="ward"
-          rules={[{ required: true, message: 'Hãy nhập tên phường/xã' }]}
-        >
-          <Input />
-        </Form.Item>
+            <Form.Item<FieldType>
+              label="Địa chỉ cụ thể"
+              name="address"
+              rules={[
+                { required: true, message: 'Hãy nhập tên địa chỉ cụ thể' },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-        <Form.Item<FieldType>
-          label="Địa chỉ cụ thể"
-          name="address"
-          rules={[{ required: true, message: 'Hãy nhập tên địa chỉ cụ thể' }]}
-        >
-          <Input />
-        </Form.Item>
+            <Form.Item<FieldType>
+              label="Mô tả về sân"
+              name="description"
+              rules={[{ required: true, message: 'Hãy nhập mô tả về sân' }]}
+            >
+              <TextArea />
+            </Form.Item>
+          </div>
+          <Form.Item<any>
+            label={
+              <div className="text-sm space-x-2">
+                <span className="text-red-500">*</span>
+                <span>Ảnh của sân</span>
+              </div>
+            }
+          >
+            <ImgUpload
+              imgProps={badmintonCourt?.imageCourt ?? null}
+              file={file}
+              handleUploadFile={handleUploadFile}
+            />
+          </Form.Item>
+        </div>
 
-        <Form.Item<FieldType>
-          label="Mô tả về sân"
-          name="description"
-          rules={[{ required: true, message: 'Hãy nhập mô tả về sân' }]}
-        >
-          <TextArea />
-        </Form.Item>
-
-        <HanoiMap location={location} handleClickMap={handleClickMap} />
+        <div className="flex flex-col justify-start items-start space-y-5">
+          <div className="text-sm space-x-2">
+            <span className="text-red-500">*</span>
+            <span>Địa điểm của sân trên bản đồ</span>
+          </div>
+          <HanoiMap location={location} handleClickMap={handleClickMap} />
+        </div>
 
         <div className="w-full flex justify-end items-end my-5">
           <Button type="primary" htmlType="submit">

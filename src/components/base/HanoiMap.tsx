@@ -43,9 +43,9 @@ export default function HanoiMap({ location, handleClickMap }: IProps) {
 
   return (
     <MapContainer
-      center={[21.0285, 105.804]}
+      center={location ? [location.lat, location.lng] : [21.0285, 105.804]}
       zoom={13}
-      style={{ height: '360px', width: '100%' }}
+      style={{ height: '400px', width: '100%' }}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

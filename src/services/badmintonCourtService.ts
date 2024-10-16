@@ -21,11 +21,34 @@ class BadmintonCourtService {
     }
   }
 
+  public async getBadmintonCourtDetail(
+    id: string,
+  ): Promise<IBaseResponse<IBadmintonCourt>> {
+    try {
+      const rs = await axiosRequest.get(`${this._prefixURL}/${id}`);
+      return Promise.resolve(rs.data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public async createBadmintonCourt(
     data: Record<string, any>,
   ): Promise<IBaseResponse<IBadmintonCourt>> {
     try {
       const rs = await axiosRequest.post(this._prefixURL, data);
+      return Promise.resolve(rs.data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async updateBadmintonCourt(
+    id: string,
+    data: Record<string, any>,
+  ): Promise<IBaseResponse<IBadmintonCourt>> {
+    try {
+      const rs = await axiosRequest.put(`${this._prefixURL}/${id}`, data);
       return Promise.resolve(rs.data);
     } catch (error) {
       return Promise.reject(error);

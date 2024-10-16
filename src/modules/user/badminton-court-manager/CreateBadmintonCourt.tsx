@@ -4,6 +4,8 @@ import CreateOrEditCourtInfo from './common/CreateOrEditCourtInfo';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { badmintonCourtService } from '../../../services';
+import { Button } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 export default function CreateBadmintonCourt() {
   const [loading, setLoading] = React.useState(false);
@@ -20,11 +22,20 @@ export default function CreateBadmintonCourt() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <>
-      <CreateOrEditCourtInfo handleSubmit={handleSubmit}/>;
+      <Button
+        className="min-w-[220px]"
+        icon={<ArrowLeftOutlined />}
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        Trở lại
+      </Button>
+      <CreateOrEditCourtInfo handleSubmit={handleSubmit} />;
       <GeneralLoading isLoading={loading} />
     </>
   );

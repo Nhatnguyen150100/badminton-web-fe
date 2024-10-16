@@ -7,6 +7,7 @@ import Profile from '../modules/user/profile/Profile';
 import BadmintonCourtRoot from '../modules/user/badminton-court-manager/BadmintonCourtRoot';
 import ListBookingCourtPost from '../modules/user/list-booking-court-post/ListBookingCourtPost';
 import CreateBadmintonCourt from '../modules/user/badminton-court-manager/CreateBadmintonCourt';
+import BadmintonCourtDetail from '../modules/user/badminton-court-manager/detail/BadmintonCourtDetail';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,11 @@ const router = createBrowserRouter([
       {
         path: DEFINE_ROUTERS_USER.newBadmintonCourt,
         element: <CreateBadmintonCourt />,
-      }
+      },
+      {
+        path: DEFINE_ROUTERS_USER.badmintonCourtDetail,
+        element: <BadmintonCourtDetail />,
+      },
     ],
   },
 ]);

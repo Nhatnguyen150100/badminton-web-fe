@@ -20,7 +20,6 @@ export default function BadmintonCourtTable() {
     limit: 5,
     page: 1,
   });
-  const dispatch = useDispatch();
 
   const columns: TableProps<IBadmintonCourt>['columns'] = [
     {
@@ -81,8 +80,12 @@ export default function BadmintonCourtTable() {
     navigate(DEFINE_ROUTERS_USER.newBadmintonCourt);
   };
 
+  const handleClickRow = (record: IBadmintonCourt) => {
+    navigate(`/badminton-court-manager/${record.id}`);
+  };
+
   return (
-    <div className="w-full min-h-[320px] flex flex-col justify-start items-start space-y-5">
+    <div className="w-full min-h-[320px] flex flex-col justify-start items-center space-y-5">
       <div className="w-full flex flex-row justify-between items-center">
         <BaseSearch
           value={query.nameLike!}
@@ -111,9 +114,9 @@ export default function BadmintonCourtTable() {
             columns={columns}
             className="cursor-pointer"
             dataSource={listCourt}
-            // onRow={(record) => ({
-            //   onClick: () => handleClickRow(record),
-            // })}
+            onRow={(record) => ({
+              onClick: () => handleClickRow(record),
+            })}
             pagination={{
               current: query.page,
               pageSize: query.limit,

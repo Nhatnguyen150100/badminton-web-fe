@@ -8,7 +8,7 @@ import { IGeneral } from '../../types/general.types';
 interface IProps {
   isOpen?: boolean;
   className?: string;
-  nameModal: IGeneral;
+  nameModal?: IGeneral;
   handleClose?: () => void;
   children: React.ReactNode;
   [x: string]: any;
@@ -28,7 +28,7 @@ export default function BaseModal({
   const dispatch = useDispatch();
 
   const handleCloseModal = () => {
-    if(handleClose) handleClose();
+    if (handleClose) handleClose();
     dispatch(setModalActive(null));
   };
 

@@ -3,14 +3,17 @@ import {
   IBadmintonCourt,
   ILatLng,
 } from '../../../../types/badmintonCourt.types';
-import { Button, Form, FormProps, Input, Select } from 'antd';
+import { Button, Form, FormProps, Input } from 'antd';
 import ImgUpload from '../../../../components/base/ImgUpload';
 import TextArea from 'antd/es/input/TextArea';
-import GeneralLoading from '../../../../components/base/GeneralLoading';
 import HanoiMap from '../../../../components/base/HanoiMap';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../../lib/store';
+import { toast } from 'react-toastify';
 
 interface IProps {
   badmintonCourt?: IBadmintonCourt;
+  handleSubmit: (data: FormData) => void;
 }
 
 type FieldType = {
@@ -21,35 +24,32 @@ type FieldType = {
   description?: string;
 };
 
-export default function CreateOrEditCourtInfo({ badmintonCourt }: IProps) {
+export default function CreateOrEditCourtInfo({ badmintonCourt, handleSubmit }: IProps) {
+  const user = useSelector((state: IRootState) => state.user);
   const [file, setFile] = React.useState<File>();
   const [location, setLocation] = React.useState<ILatLng>({
     lat: Number(badmintonCourt?.lat),
     lng: Number(badmintonCourt?.lang),
   });
   const [form] = Form.useForm();
-  const [loading, setLoading] = React.useState(false);
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const data = { ...values };
-    // try {
-    //   setLoading(true);
-    //   const formData = new FormData();
-    //   if (file) formData.append('avatar', file);
-    //   formData.append('fullName', data.fullName!);
-    //   formData.append('gender', data.gender!);
-    //   formData.append('phoneNumber', data.phoneNumber!.toString());
-    //   const rs = await profileService.updateProfile(user.id, formData, {
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   });
-    //   dispatch(setUser({ ...user, ...rs.data }));
-    //   toast.success(rs.message);
-    //   navigate(-1);
-    // } finally {
-    //   setLoading(false);
-    // }
+    if (!user.id) {
+      toast.error('User id không tìm thấy');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('userId', user.id.toString());
+    formData.append('name', data.name);
+    formData.append('district', data.district);
+    formData.append('ward', data.ward);
+    formData.append('address', data.address);
+    formData.append('lang', location.lng.toString());
+    formData.append('lat', location.lat.toString());
+    formData.append('description', data.description ?? '');
+    if (file) formData.append('imageCourt', file);
+    handleSubmit(formData);
   };
 
   const handleUploadFile = (file: File | undefined) => {
@@ -89,7 +89,14 @@ export default function CreateOrEditCourtInfo({ badmintonCourt }: IProps) {
           <Input size="large" />
         </Form.Item>
 
-        <Form.Item<any> label="Ảnh sân cầu">
+        <Form.Item<any>
+          label={
+            <div className="text-sm space-x-2">
+              <span className="text-red-500">*</span>
+              <span>Ảnh của sân</span>
+            </div>
+          }
+        >
           <ImgUpload
             imgProps={badmintonCourt?.imageCourt ?? null}
             file={file}
@@ -115,7 +122,7 @@ export default function CreateOrEditCourtInfo({ badmintonCourt }: IProps) {
 
         <Form.Item<FieldType>
           label="Địa chỉ cụ thể"
-          name="ward"
+          name="address"
           rules={[{ required: true, message: 'Hãy nhập tên địa chỉ cụ thể' }]}
         >
           <Input />
@@ -133,11 +140,12 @@ export default function CreateOrEditCourtInfo({ badmintonCourt }: IProps) {
 
         <div className="w-full flex justify-end items-end my-5">
           <Button type="primary" htmlType="submit">
-            {badmintonCourt?.id ? 'Cập nhật thông tin sân' : 'Thêm mới thông tin sân'}
+            {badmintonCourt?.id
+              ? 'Cập nhật thông tin sân'
+              : 'Thêm mới thông tin sân'}
           </Button>
         </div>
       </Form>
-      <GeneralLoading isLoading={loading} />
     </div>
   );
 }

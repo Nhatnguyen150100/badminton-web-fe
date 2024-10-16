@@ -1,8 +1,8 @@
-import axiosRequest from "../plugins/request";
-import { IBadmintonCourt } from "../types/badmintonCourt.types";
-import { IBaseQuery } from "../types/query.types";
-import { IBaseResponse, IBaseResponseList } from "../types/response.types";
-import onRemoveParams from "../utils/functions/on-remove-params";
+import axiosRequest from '../plugins/request';
+import { IBadmintonCourt } from '../types/badmintonCourt.types';
+import { IBaseQuery } from '../types/query.types';
+import { IBaseResponse, IBaseResponseList } from '../types/response.types';
+import onRemoveParams from '../utils/functions/on-remove-params';
 
 class BadmintonCourtService {
   private _prefixURL = '/v1/court';
@@ -21,6 +21,16 @@ class BadmintonCourtService {
     }
   }
 
+  public async createBadmintonCourt(
+    data: Record<string, any>,
+  ): Promise<IBaseResponse<IBadmintonCourt>> {
+    try {
+      const rs = await axiosRequest.post(this._prefixURL, data);
+      return Promise.resolve(rs.data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }
 
 export default BadmintonCourtService;

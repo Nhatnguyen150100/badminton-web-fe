@@ -8,7 +8,7 @@ interface Props {
 export default function BaseContainer({ children, className }: Props) {
   return (
     <div
-      className={`flex flex-wrap justify-between items-start mx-auto max-w-screen-xl py-10 ${
+      className={`flex flex-wrap justify-between items-start mx-auto max-w-screen-xl py-10 overflow-y-auto ${
         className ?? ''
       }`}
     >

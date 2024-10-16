@@ -4,7 +4,7 @@ import { IBaseResponse } from '../types/response.types';
 class ProfileService {
   private _prefixURL = '/v1/profile';
 
-  public async updateKanji(
+  public async updateProfile(
     id: string,
     data: Record<string, any>,
     options?: any

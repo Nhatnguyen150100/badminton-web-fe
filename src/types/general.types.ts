@@ -1,3 +1,6 @@
-import DEFINE_MODAL_NAME from "../constants/modal-name";
+export type IDefineModalName = {
+  LOGIN_MODAL: 'LOGIN_MODAL',
+  REGISTER_MODAL: 'REGISTER_MODAL',
+}
 
-export type IGeneral = keyof typeof DEFINE_MODAL_NAME | null
+export type IGeneral = IDefineModalName[keyof IDefineModalName]  | null

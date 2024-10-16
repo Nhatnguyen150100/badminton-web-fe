@@ -1,8 +1,8 @@
 import { Breadcrumb, Tabs, TabsProps } from 'antd';
 import * as React from 'react';
-import CreateBadmintonCourt from './CreateBadmintonCourt';
+import CreateBadmintonCourt from '../CreateBadmintonCourt';
 import { Link, useParams } from 'react-router-dom';
-import { DEFINE_ROUTERS_USER } from '../../../constants/routers-mapper';
+import { DEFINE_ROUTERS_USER } from '../../../../constants/routers-mapper';
 
 const items: TabsProps['items'] = [
   {

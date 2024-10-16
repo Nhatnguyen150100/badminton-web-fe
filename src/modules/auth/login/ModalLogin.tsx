@@ -1,19 +1,16 @@
-import { Button, Input, Modal } from 'antd';
+import { Input } from 'antd';
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { authService } from '../../../services';
 import cookiesStore from '../../../plugins/cookiesStore';
 import { setUser } from '../../../lib/reducer/userSlice';
-import { IRootState } from '../../../lib/store';
 import DEFINE_MODAL_NAME from '../../../constants/modal-name';
 import { setModalActive } from '../../../lib/reducer/generalSlice';
 import { IGeneral } from '../../../types/general.types';
+import BaseModal from '../../../components/base/BaseModal';
 
 export default function ModalLogin() {
-  const modalActive = useSelector(
-    (state: IRootState) => state.general.modalActive,
-  );
   const dispatch = useDispatch();
   const [form, setForm] = React.useState({
     email: '',
@@ -46,21 +43,19 @@ export default function ModalLogin() {
       email: '',
       password: '',
     });
-    dispatch(setModalActive(null));
   };
 
   const handleRegister = () => {
-    dispatch(setModalActive(DEFINE_MODAL_NAME.REGISTER_MODAL as IGeneral));
+    dispatch(setModalActive(DEFINE_MODAL_NAME.REGISTER_MODAL));
   };
 
   return (
     <>
-      <Modal
+      <BaseModal
         className="!p-0 auth-modal"
-        centered
+        nameModal={DEFINE_MODAL_NAME.LOGIN_MODAL}
+        handleClose={handleClose}
         footer={null}
-        open={modalActive === DEFINE_MODAL_NAME.LOGIN_MODAL}
-        onCancel={handleClose}
       >
         <div className="text-center space-y-3 mb-4">
           <img className="mx-auto w-40" src="/logo.png" alt="logo" />
@@ -114,7 +109,7 @@ export default function ModalLogin() {
             </button>
           </div>
         </form>
-      </Modal>
+      </BaseModal>
     </>
   );
 }

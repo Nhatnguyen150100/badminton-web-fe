@@ -16,7 +16,7 @@ const BaseSearch: React.FC<SearchInputProps> = ({
   value,
 }) => {
   return (
-    <div className="flex flex-row justify-center items-center h-[60px]">
+    <div className="flex flex-row justify-center items-center h-[50px]">
       <div className="flex items-center border-[1px] border-solid border-gray-300 rounded-3xl overflow-hidden shadow-sm focus-within:shadow-md transition-shadow duration-300 h-full w-[400px]">
         <div className="ps-5">
           <SearchOutlined className="text-gray-500 text-2xl" />
@@ -34,9 +34,8 @@ const BaseSearch: React.FC<SearchInputProps> = ({
           className="flex-1 p-2 outline-none border-none focus:ring-0"
         />
       </div>
-
       <Button
-        className="h-[60px] ms-5 rounded-2xl"
+        className="h-[50px] ms-5 rounded-xl"
         type="primary"
         onClick={onSearch}
       >

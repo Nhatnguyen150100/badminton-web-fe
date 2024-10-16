@@ -8,7 +8,7 @@ import { profileService } from '../../../services';
 import { toast } from 'react-toastify';
 import { setUser } from '../../../lib/reducer/userSlice';
 import AvatarUpload from '../../../components/common/AvatarUpload';
-import axiosRequest from '../../../plugins/request';
+import { useNavigate } from 'react-router-dom';
 
 type FieldType = {
   email: string;
@@ -24,6 +24,8 @@ export default function Profile() {
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
   const [currentAvatar, setCurrentAvatar] = React.useState<string | null>(user?.avatar);
+  const navigate = useNavigate();
+
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const data = { ...values };
@@ -34,13 +36,14 @@ export default function Profile() {
       formData.append('fullName', data.fullName!);
       formData.append('gender', data.gender!);
       formData.append('phoneNumber', data.phoneNumber!.toString());
-      const rs = await profileService.updateKanji(user.id, formData, {
+      const rs = await profileService.updateProfile(user.id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       dispatch(setUser({ ...user, ...rs.data }));
       toast.success(rs.message);
+      navigate(-1);
     } finally {
       setLoading(false);
     }

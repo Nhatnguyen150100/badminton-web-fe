@@ -5,6 +5,8 @@ import ListBadmintonCourtPost from '../modules/user/list-badminton-court-post/Li
 import { DEFINE_ROUTERS_USER } from '../constants/routers-mapper';
 import Profile from '../modules/user/profile/Profile';
 import BadmintonCourtRoot from '../modules/user/badminton-court-manager/BadmintonCourtRoot';
+import ListBookingCourtPost from '../modules/user/list-booking-court-post/ListBookingCourtPost';
+import CreateBadmintonCourt from '../modules/user/badminton-court-manager/CreateBadmintonCourt';
 
 const router = createBrowserRouter([
   {
@@ -18,12 +20,20 @@ const router = createBrowserRouter([
         element: <ListBadmintonCourtPost />,
       },
       {
+        path: DEFINE_ROUTERS_USER.listPostBooking,
+        element: <ListBookingCourtPost />,
+      },
+      {
         path: DEFINE_ROUTERS_USER.profile,
         element: <Profile />,
       },
       {
         path: DEFINE_ROUTERS_USER.badmintonCourtManager,
         element: <BadmintonCourtRoot />,
+      },
+      {
+        path: DEFINE_ROUTERS_USER.newBadmintonCourt,
+        element: <CreateBadmintonCourt />,
       }
     ],
   },

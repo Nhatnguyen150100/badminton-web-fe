@@ -1,0 +1,26 @@
+import axiosRequest from "../plugins/request";
+import { IBadmintonCourt } from "../types/badmintonCourt.types";
+import { IBaseQuery } from "../types/query.types";
+import { IBaseResponse, IBaseResponseList } from "../types/response.types";
+import onRemoveParams from "../utils/functions/on-remove-params";
+
+class BadmintonCourtService {
+  private _prefixURL = '/v1/court';
+
+  public async getBadmintonCourtManager(
+    id: string,
+    query: IBaseQuery,
+  ): Promise<IBaseResponse<IBaseResponseList<IBadmintonCourt[]>>> {
+    try {
+      const rs = await axiosRequest.get(`${this._prefixURL}/manager/${id}`, {
+        params: onRemoveParams(query),
+      });
+      return Promise.resolve(rs.data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+}
+
+export default BadmintonCourtService;

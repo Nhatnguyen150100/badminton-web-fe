@@ -1,4 +1,5 @@
-import * as React from 'react';
+import CreateOrEditCourtInfo from './common/CreateOrEditCourtInfo';
+
 export default function CreateBadmintonCourt() {
-  return <div>CreateBadmintonCourt</div>;
+  return <CreateOrEditCourtInfo />;
 }

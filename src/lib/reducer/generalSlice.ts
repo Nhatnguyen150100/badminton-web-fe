@@ -17,16 +17,9 @@ export const generalSlice = createSlice({
     setModalActive: (state, action: PayloadAction<IGeneral>) => {
       state.modalActive = action.payload;
     },
-    // decrement: (state) => {
-    //   state.value -= 1
-    // },
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value += action.payload
-    // },
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setModalActive } = generalSlice.actions;
 
 const generalReducer = generalSlice.reducer;

@@ -32,6 +32,8 @@ export default function CreateOrEditCourtInfo({
 }: IProps) {
   const user = useSelector((state: IRootState) => state.user);
   const [file, setFile] = React.useState<File>();
+  const [currentImg, setCurrentImg] = React.useState<string | null>(badmintonCourt?.imageCourt ?? null);
+
   const [location, setLocation] = React.useState<ILatLng>({
     lat: Number(badmintonCourt?.lat),
     lng: Number(badmintonCourt?.lang),
@@ -80,6 +82,7 @@ export default function CreateOrEditCourtInfo({
 
   const handleUploadFile = (file: File | undefined) => {
     setFile(file);
+    setCurrentImg(null);
   };
 
   const handleClickMap = (latLng: ILatLng | null) => {
@@ -165,7 +168,7 @@ export default function CreateOrEditCourtInfo({
             }
           >
             <ImgUpload
-              imgProps={badmintonCourt?.imageCourt ?? null}
+              imgProps={currentImg}
               file={file}
               handleUploadFile={handleUploadFile}
             />

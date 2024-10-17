@@ -262,9 +262,6 @@ export default function AdminPage({}: Props) {
               columns={columns}
               className="cursor-pointer"
               dataSource={listCourt}
-              // onRow={(record) => ({
-              //   onClick: () => handleClickRow(record),
-              // })}
               pagination={{
                 current: query.page,
                 pageSize: query.limit,

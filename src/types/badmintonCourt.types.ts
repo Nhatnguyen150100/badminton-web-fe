@@ -1,3 +1,4 @@
+import { IBaseQuery } from './query.types';
 import { IStatusLabel } from './status.types';
 
 export interface IBadmintonCourt {
@@ -19,4 +20,9 @@ export interface IBadmintonCourt {
 export interface ILatLng {
   lat: number;
   lng: number;
+}
+
+
+export interface IQueryBadmintonCourtAdmin extends IBaseQuery {
+  status?: IStatusLabel;
 }

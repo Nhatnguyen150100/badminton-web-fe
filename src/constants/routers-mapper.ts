@@ -1,5 +1,6 @@
 const DEFINE_ROUTERS_ADMIN = {
-  home: 'admin/',
+  home: '/admin',
+  loginAdmin: '/login-admin',
 };
 
 const DEFINE_ROUTERS_USER = {

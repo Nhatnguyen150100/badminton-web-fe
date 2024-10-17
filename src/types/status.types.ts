@@ -10,8 +10,6 @@ export type IScheduleStatus = {
   NOT_AVAILABLE: "NOT_AVAILABLE",
 }
 
-export type IScheduleStatusLabel = {
-  [K in keyof IScheduleStatus]: string;
-};
+export type IScheduleStatusLabel = IScheduleStatus[keyof IScheduleStatus]
 
 export type IStatusLabel = IStatusPost[keyof IStatusPost]

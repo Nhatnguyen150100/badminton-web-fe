@@ -163,8 +163,8 @@ const CourtNumberTab: React.FC<IProps> = ({ id }) => {
   };
 
   React.useEffect(() => {
-    if (id && !query.nameLike) handleGetList();
-  }, [id, query.nameLike]);
+    if (id) handleGetList();
+  }, [id]);
 
   const handleClickRow = (record: ITimeBooking) => {
     setEditTimeBooking(record);
@@ -173,15 +173,7 @@ const CourtNumberTab: React.FC<IProps> = ({ id }) => {
 
   return (
     <div className="w-full min-h-[320px] flex flex-col justify-start items-center space-y-5">
-      <div className="w-full flex flex-row justify-between items-center">
-        <BaseSearch
-          value={query.nameLike!}
-          placeholder="Nhập để tìm kiếm"
-          onHandleChange={(value) => {
-            setQuery({ ...query, nameLike: value });
-          }}
-          onSearch={() => handleGetList()}
-        />
+      <div className="w-full flex flex-row justify-end items-center">
         <Button
           type="primary"
           variant="filled"

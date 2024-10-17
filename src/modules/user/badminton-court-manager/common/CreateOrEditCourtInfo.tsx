@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../lib/store';
 import { toast } from 'react-toastify';
 import DATA from '../../../../mock/dvhc.json';
+import { ISelectType } from '../../../../types/select.types';
 
 interface IProps {
   badmintonCourt?: IBadmintonCourt;
@@ -23,11 +24,6 @@ type FieldType = {
   ward: string;
   address: string;
   description?: string;
-};
-
-type ISelectType = {
-  label: string;
-  value: string;
 };
 
 export default function CreateOrEditCourtInfo({

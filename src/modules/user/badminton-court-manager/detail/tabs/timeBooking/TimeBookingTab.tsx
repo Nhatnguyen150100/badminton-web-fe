@@ -25,6 +25,7 @@ import dayjs from 'dayjs';
 import { formatDate } from '../../../../../../utils/functions/format-date';
 import TimeBookingForm from './TimeBookingForm';
 import { ITimeBooking } from '../../../../../../types/timeBooking.types';
+import { FORMAT_TIME } from '../../../../../../constants/time';
 
 interface IProps {
   id: string;
@@ -120,7 +121,8 @@ const CourtNumberTab: React.FC<IProps> = ({ id }) => {
   ];
 
   const onFinish: FormProps<{
-    name: string;
+    startTime: string;
+    endTime: string;
   }>['onFinish'] = async (values) => {
     const data = { ...values };
     if (!id) {
@@ -132,7 +134,8 @@ const CourtNumberTab: React.FC<IProps> = ({ id }) => {
       const rs = editTimeBooking?.id
         ? await timeBookingService.updateTimeBooking(editTimeBooking!.id, data)
         : await timeBookingService.createTimeBooking({
-            ...data,
+            startTime: dayjs(data.startTime).format(FORMAT_TIME),
+            endTime: dayjs(data.endTime).format(FORMAT_TIME),
             badmintonCourtId: id,
           });
       toast.success(rs.message);

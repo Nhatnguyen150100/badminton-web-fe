@@ -43,9 +43,10 @@ export default function HanoiMap({ location, handleClickMap }: IProps) {
 
   return (
     <MapContainer
-      center={location ? [location.lat, location.lng] : [21.0285, 105.804]}
+      center={Boolean(checkLatLng(location ?? null)) ? [location!.lat, location!.lng] : [21.0285, 105.804]}
       zoom={13}
       style={{ height: '400px', width: '100%' }}
+      className='cursor-map'
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

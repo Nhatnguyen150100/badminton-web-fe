@@ -31,6 +31,10 @@
   transform: scale(1.03);
 }
 
+.cursor-map {
+  cursor: crosshair !important;
+}
+
 .loading-overlay {
   position: fixed; /* Đặt overlay cố định */
   top: 0;

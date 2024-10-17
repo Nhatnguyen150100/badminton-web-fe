@@ -1,7 +1,9 @@
 import React from 'react';
 import BaseModal from '../../../../../../components/base/BaseModal';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, TimePicker } from 'antd';
 import { ITimeBooking } from '../../../../../../types/timeBooking.types';
+import { FORMAT_TIME } from '../../../../../../constants/time';
+import dayjs from 'dayjs';
 
 interface IProps {
   isOpenModal: boolean;
@@ -40,8 +42,8 @@ export default function TimeBookingForm({
           name="form"
           onFinish={onFinish}
           initialValues={{
-            startTime: editTimeBooking?.startTime,
-            endTime: editTimeBooking?.endTime,
+            startTime: editTimeBooking?.startTime ? dayjs(editTimeBooking?.startTime, FORMAT_TIME) : null,
+            endTime: editTimeBooking?.endTime ? dayjs(editTimeBooking?.endTime, FORMAT_TIME) : null,
           }}
           autoComplete="off"
         >
@@ -50,7 +52,7 @@ export default function TimeBookingForm({
             name="startTime"
             rules={[{ required: true, message: 'Hãy nhập thời gian bắt đầu' }]}
           >
-            <Input size="large" />
+            <TimePicker className='w-full' format={FORMAT_TIME} placeholder='Chọn thời gian bắt đầu'/>
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -58,7 +60,7 @@ export default function TimeBookingForm({
             name="endTime"
             rules={[{ required: true, message: 'Hãy nhập thời gian kết thúc' }]}
           >
-            <Input size="large" />
+            <TimePicker className='w-full' format={FORMAT_TIME} placeholder='Chọn thời gian kết thúc' />
           </Form.Item>
 
           <div className="w-full flex justify-end items-end my-5">

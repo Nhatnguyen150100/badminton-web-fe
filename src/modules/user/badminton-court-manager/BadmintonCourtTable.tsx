@@ -10,6 +10,7 @@ import BaseSearch from '../../../components/base/BaseSearch';
 import { onChooseStatus } from '../../../utils/on-choose-status';
 import { useNavigate } from 'react-router-dom';
 import { DEFINE_ROUTERS_USER } from '../../../constants/routers-mapper';
+import { onGetDistrictName, onGetWardName } from '../../../utils/functions/on-location-name';
 
 export default function BadmintonCourtTable() {
   const navigate = useNavigate();
@@ -32,11 +33,13 @@ export default function BadmintonCourtTable() {
       title: 'Quận',
       dataIndex: 'district',
       key: 'district',
+      render: (idDistrict) => <span>{onGetDistrictName(idDistrict)}</span>,
     },
     {
       title: 'Phường',
       key: 'ward',
       dataIndex: 'ward',
+      render: (_: any, record: IBadmintonCourt) => <span>{onGetWardName(record.district, record.ward)}</span>,
     },
     {
       title: 'Địa chỉ',

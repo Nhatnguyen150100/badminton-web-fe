@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   IBadmintonCourt,
   ILatLng,
 } from '../../../../types/badmintonCourt.types';
-import { Button, Form, FormProps, Input } from 'antd';
+import { Button, Form, FormProps, Input, Select } from 'antd';
 import ImgUpload from '../../../../components/base/ImgUpload';
 import TextArea from 'antd/es/input/TextArea';
 import HanoiMap from '../../../../components/base/HanoiMap';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../lib/store';
 import { toast } from 'react-toastify';
+import DATA from '../../../../mock/dvhc.json';
 
 interface IProps {
   badmintonCourt?: IBadmintonCourt;
@@ -24,6 +25,11 @@ type FieldType = {
   description?: string;
 };
 
+type ISelectType = {
+  label: string;
+  value: string;
+};
+
 export default function CreateOrEditCourtInfo({
   badmintonCourt,
   handleSubmit,
@@ -35,6 +41,27 @@ export default function CreateOrEditCourtInfo({
     lng: Number(badmintonCourt?.lang),
   });
   const [form] = Form.useForm();
+  const district = Form.useWatch('district', form);
+
+  const districtData = DATA.level2s.map((district): ISelectType => {
+    return {
+      label: district.name,
+      value: district.level2_id,
+    };
+  });
+
+  const wardData = useMemo(() => {
+    if (!district) return [];
+    const currentDistrict = DATA.level2s.find(
+      (districtData) => districtData.level2_id === district,
+    );
+    return currentDistrict?.level3s.map(
+      (wardData): ISelectType => ({
+        label: wardData.name,
+        value: wardData.level3_id,
+      }),
+    );
+  }, [district]);
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const data = { ...values };
@@ -99,7 +126,12 @@ export default function CreateOrEditCourtInfo({
               name="district"
               rules={[{ required: true, message: 'Hãy nhập tên quận/huyện' }]}
             >
-              <Input />
+              <Select
+                options={districtData}
+                onChange={(_) => {
+                  form.setFieldsValue({ ward: '' });
+                }}
+              />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -107,7 +139,7 @@ export default function CreateOrEditCourtInfo({
               name="ward"
               rules={[{ required: true, message: 'Hãy nhập tên phường/xã' }]}
             >
-              <Input />
+              <Select disabled={!district} options={wardData} />
             </Form.Item>
 
             <Form.Item<FieldType>

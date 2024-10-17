@@ -32,7 +32,9 @@ export default function CreateOrEditCourtInfo({
 }: IProps) {
   const user = useSelector((state: IRootState) => state.user);
   const [file, setFile] = React.useState<File>();
-  const [currentImg, setCurrentImg] = React.useState<string | null>(badmintonCourt?.imageCourt ?? null);
+  const [currentImg, setCurrentImg] = React.useState<string | null>(
+    badmintonCourt?.imageCourt ?? null,
+  );
 
   const [location, setLocation] = React.useState<ILatLng>({
     lat: Number(badmintonCourt?.lat),

@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { message, Button, Tooltip } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
-import Visibility from "./visibility";
+import React, { useMemo, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { message, Button, Tooltip } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
+import Visibility from './visibility';
 
 interface IProps {
   imgProps: string | null;
@@ -11,18 +11,18 @@ interface IProps {
 }
 
 const styleImg = {
-  border: "2px dashed #d9d9d9",
-  borderRadius: "12px",
-  padding: "16px",
-  height: "280px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#f8f8f8",
-  color: "#999",
-  textAlign: "center",
-  cursor: "pointer",
-  overflow: "hidden",
+  border: '2px dashed #d9d9d9',
+  borderRadius: '12px',
+  padding: '16px',
+  height: '280px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#f8f8f8',
+  color: '#999',
+  textAlign: 'center',
+  cursor: 'pointer',
+  overflow: 'hidden',
 };
 
 export default function ImgUpload({
@@ -69,7 +69,7 @@ export default function ImgUpload({
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
-      "image/*": [],
+      'image/jpeg': ['.jpg'],
     },
     maxFiles: 1,
     onDrop,

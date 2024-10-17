@@ -1,5 +1,8 @@
 import axiosRequest from '../plugins/request';
-import { IBadmintonCourt, IQueryBadmintonCourtAdmin } from '../types/badmintonCourt.types';
+import {
+  IBadmintonCourt,
+  IQueryBadmintonCourtAdmin,
+} from '../types/badmintonCourt.types';
 import { IBaseQuery } from '../types/query.types';
 import { IBaseResponse, IBaseResponseList } from '../types/response.types';
 import onRemoveParams from '../utils/functions/on-remove-params';
@@ -20,7 +23,7 @@ class BadmintonCourtService {
       return Promise.reject(error);
     }
   }
-  
+
   public async getBadmintonCourtAdmin(
     query: IQueryBadmintonCourtAdmin,
   ): Promise<IBaseResponse<IBaseResponseList<IBadmintonCourt[]>>> {
@@ -74,7 +77,11 @@ class BadmintonCourtService {
     data: Record<string, any>,
   ): Promise<IBaseResponse<IBadmintonCourt>> {
     try {
-      const rs = await axiosRequest.put(`${this._prefixURL}/${id}`, data);
+      const rs = await axiosRequest.put(`${this._prefixURL}/${id}`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return Promise.resolve(rs.data);
     } catch (error) {
       return Promise.reject(error);
@@ -86,16 +93,17 @@ class BadmintonCourtService {
     data: Record<string, any>,
   ): Promise<IBaseResponse<IBadmintonCourt>> {
     try {
-      const rs = await axiosRequest.put(`${this._prefixURL}/status/${id}`, data);
+      const rs = await axiosRequest.put(
+        `${this._prefixURL}/status/${id}`,
+        data,
+      );
       return Promise.resolve(rs.data);
     } catch (error) {
       return Promise.reject(error);
     }
   }
 
-  public async deleteBadmintonCourt(
-    id: string,
-  ): Promise<IBaseResponse<any>> {
+  public async deleteBadmintonCourt(id: string): Promise<IBaseResponse<any>> {
     try {
       const rs = await axiosRequest.delete(`${this._prefixURL}/${id}`);
       return Promise.resolve(rs.data);

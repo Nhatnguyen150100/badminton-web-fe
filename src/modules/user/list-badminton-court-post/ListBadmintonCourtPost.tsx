@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IBadmintonCourt } from '../../../types/badmintonCourt.types';
 import { IBaseQuery } from '../../../types/query.types';
 import Visibility from '../../../components/base/visibility';
-import { Button, Empty, message, Spin } from 'antd';
+import { Button, Empty, message, Select, Spin } from 'antd';
 import { badmintonCourtService } from '../../../services';
 import { CompassOutlined, InfoOutlined } from '@ant-design/icons';
 import {
@@ -10,6 +10,8 @@ import {
   onGetWardName,
 } from '../../../utils/functions/on-location-name';
 import CourtMapPost from '../../../components/base/CourtMapPost';
+import DATA from '../../../mock/dvhc.json';
+import { ISelectType } from '../../../types/select.types';
 
 export default function ListBadmintonCourtPost() {
   const [listCourt, setListCourt] = React.useState<IBadmintonCourt[]>([]);
@@ -44,38 +46,89 @@ export default function ListBadmintonCourtPost() {
     handleGetList();
   }, [query.limit]);
 
-  // const districtData = DATA.level2s.map((district): ISelectType => {
-  //   return {
-  //     label: district.name,
-  //     value: district.level2_id,
-  //   };
-  // });
+  const districtData = DATA.level2s.map((district): ISelectType => {
+    return {
+      label: district.name,
+      value: district.level2_id,
+    };
+  });
 
-  // const wardData = useMemo(() => {
-  //   if (!district) return [];
-  //   const currentDistrict = DATA.level2s.find(
-  //     (districtData) => districtData.level2_id === district,
-  //   );
-  //   return currentDistrict?.level3s.map(
-  //     (wardData): ISelectType => ({
-  //       label: wardData.name,
-  //       value: wardData.level3_id,
-  //     }),
-  //   );
-  // }, [district]);
+  const wardData = React.useMemo(() => {
+    if (!query.district) return [];
+    const currentDistrict = DATA.level2s.find(
+      (districtData) => districtData.level2_id === query.district,
+    );
+    return currentDistrict?.level3s.map(
+      (wardData): ISelectType => ({
+        label: wardData.name,
+        value: wardData.level3_id,
+      }),
+    );
+  }, [query.district]);
 
   return (
     <>
-      <div className="h-[calc(100vh-170px)] grid grid-cols-2 gap-x-3">
-        <div className="h-full overflow-y-auto overflow-x-hidden flex-col justify-center items-start space-y-3">
-          <Visibility
-            visibility={Boolean(listCourt.length)}
-            suspenseComponent={loading ? <Spin /> : <Empty />}
+      <div className="flex flex-row justify-between items-center mb-5 w-full">
+        <div className='space-x-3'>
+          <Select
+            className="min-w-[120px]"
+            placeholder="Lọc theo quận/huyện"
+            allowClear
+            onClear={() => {
+              setQuery(
+                (pre) => ({ ...pre, ward: null } as unknown as IBaseQuery),
+              );
+            }}
+            value={query.district}
+            onChange={(value) =>
+              setQuery((pre) => ({ ...pre, district: value }))
+            }
           >
+            {districtData.map((district) => (
+              <Select.Option key={district.value} value={district.value}>
+                {district.label}
+              </Select.Option>
+            ))}
+          </Select>
+          <Select
+            className="min-w-[120px]"
+            disabled={!query?.district}
+            placeholder="Lọc theo phường/xã"
+            allowClear
+            onChange={(value) =>
+              setQuery((pre) => ({ ...pre, ward: value }))
+            }
+            value={query.ward}
+          >
+            {wardData!.map((ward) => (
+              <Select.Option key={ward.value} value={ward.value}>
+                {ward.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
+        <Button
+          type="primary"
+          className="min-w-[120px]"
+          onClick={handleGetList}
+        >
+          Tìm kiếm
+        </Button>
+      </div>
+      <div
+        className={`h-[calc(100vh-230px)] grid gap-x-3 ${
+          Boolean(listCourt.length) ? 'grid-cols-2' : 'grid-cols-1 w-full'
+        }`}
+      >
+        <Visibility
+          visibility={Boolean(listCourt.length)}
+          suspenseComponent={loading ? <Spin /> : <Empty />}
+        >
+          <div className="h-full overflow-y-auto overflow-x-hidden flex-col justify-center items-start space-y-3">
             {listCourt.map((court) => (
               <div
                 key={court.id}
-                className="flex flex-row justify-start items-start rounded-2xl shadow-xl p-5 space-x-5 cursor-pointer hover:border-dashed hover:border hover:border-blue-500"
+                className="flex flex-row justify-start items-start rounded-2xl shadow-xl p-5 space-x-5 cursor-pointer border border-solid hover:border-dashed hover:border hover:border-blue-500"
               >
                 <img
                   className="h-full max-w-[260px] rounded-xl object-contain"
@@ -119,9 +172,9 @@ export default function ListBadmintonCourtPost() {
                 </Button>
               </Visibility>
             </div>
-          </Visibility>
-        </div>
-        <CourtMapPost listLocation={listMarkers} />
+          </div>
+          <CourtMapPost listLocation={listMarkers} />
+        </Visibility>
       </div>
     </>
   );

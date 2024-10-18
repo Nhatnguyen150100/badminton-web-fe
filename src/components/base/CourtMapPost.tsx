@@ -17,7 +17,7 @@ export default function CourtMapPost({ listLocation }: IProps) {
     <MapContainer
       center={[21.0285, 105.83]}
       zoom={13}
-      style={{ height: '100%', width: '580px' }}
+      style={{ height: '100%', width: '100%' }}
       className="cursor-map"
     >
       <TileLayer

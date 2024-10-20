@@ -1,6 +1,8 @@
+import { IBadmintonCourt } from './badmintonCourt.types';
 import { ICourtNumber } from './courtNumber.types';
 import { IStatusLabel } from './status.types';
 import { ITimeBooking } from './timeBooking.types';
+import { IUser } from './user.types';
 
 export interface IUserBooking {
   id: string;
@@ -15,16 +17,16 @@ export interface IUserBookingDetail {
   schedule: IScheduleUserBooking;
 }
 
+export interface IUserBookingDetailByAdmin extends IUserBookingDetail {
+  user: IUser;
+  id: string;
+  note: string;
+}
+
 interface IScheduleUserBooking {
   appointmentDate: string;
   constBooking: number;
-  badmintonCourt: BadmintonCourt;
+  badmintonCourt: IBadmintonCourt;
   courtNumber: ICourtNumber;
   timeBooking: ITimeBooking;
-}
-
-interface BadmintonCourt {
-  id: string;
-  name: string;
-  address: string;
 }

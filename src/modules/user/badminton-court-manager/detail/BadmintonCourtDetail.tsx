@@ -6,6 +6,7 @@ import InfoTab from './tabs/InfoTab';
 import CourtNumberTab from './tabs/courtNumber/CourtNumberTab';
 import TimeBookingTab from './tabs/timeBooking/TimeBookingTab';
 import ScheduleTab from './tabs/schedule/ScheduleTab';
+import UserBookingTab from './tabs/userBooking/UserBookingTab';
 
 export default function BadmintonCourtDetail() {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +36,11 @@ export default function BadmintonCourtDetail() {
         key: '4',
         label: 'Quản lý lịch cho thuê',
         children: <ScheduleTab id={id} />,
+      },
+      {
+        key: '5',
+        label: 'Danh sách lịch được đặt',
+        children: <UserBookingTab id={id} />,
       },
     ];
   }, [id]);

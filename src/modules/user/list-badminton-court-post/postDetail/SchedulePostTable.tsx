@@ -176,7 +176,7 @@ export default function SchedulePostTable({ id, userId }: IProps) {
       ),
     },
     {
-      title: 'Ngày lịch đặt',
+      title: 'Ngày thuê',
       dataIndex: 'appointmentDate',
       align: 'center',
       key: 'appointmentDate',

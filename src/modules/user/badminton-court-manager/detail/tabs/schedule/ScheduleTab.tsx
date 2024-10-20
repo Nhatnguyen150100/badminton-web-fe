@@ -1,8 +1,21 @@
 import * as React from 'react';
 import { ISchedule } from '../../../../../../types/schedule.types';
 import { IBaseQuery } from '../../../../../../types/query.types';
-import { Button, Empty, FormProps, Modal, Spin, Table, TableProps } from 'antd';
-import { courtNumberService, scheduleService, timeBookingService } from '../../../../../../services';
+import {
+  Button,
+  Empty,
+  FormProps,
+  Modal,
+  Select,
+  Spin,
+  Table,
+  TableProps,
+} from 'antd';
+import {
+  courtNumberService,
+  scheduleService,
+  timeBookingService,
+} from '../../../../../../services';
 import { toast } from 'react-toastify';
 import { formatDate } from '../../../../../../utils/functions/format-date';
 import { onChooseStatusSchedule } from '../../../../../../utils/on-choose-status-schedule';
@@ -15,21 +28,24 @@ import { formatCurrencyVND } from '../../../../../../utils/functions/format-mone
 import { ITimeBooking } from '../../../../../../types/timeBooking.types';
 import { ICourtNumber } from '../../../../../../types/courtNumber.types';
 
-
 interface IProps {
   id: string;
 }
 
 const ScheduleTab: React.FC<IProps> = ({ id }) => {
   const [listSchedule, setListSchedule] = React.useState<ISchedule[]>([]);
-  const [listTimeBooking, setListTimeBooking] = React.useState<ITimeBooking[]>([]);
-  console.log("🚀 ~ listTimeBooking:", listTimeBooking)
-  const [listCourtNumber, setListCourtNumber] = React.useState<ICourtNumber[]>([]);
-  console.log("🚀 ~ listCourtNumber:", listCourtNumber)
+  const [listTimeBooking, setListTimeBooking] = React.useState<ITimeBooking[]>(
+    [],
+  );
+  const [listCourtNumber, setListCourtNumber] = React.useState<ICourtNumber[]>(
+    [],
+  );
   const [loading, setLoading] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<IBaseQuery>({
     limit: 5,
     page: 1,
+    courtNumberId: undefined,
+    timeBookingId: undefined,
   });
   const [editSchedule, setEditSchedule] = React.useState<ISchedule>();
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
@@ -48,9 +64,7 @@ const ScheduleTab: React.FC<IProps> = ({ id }) => {
       onOk: async () => {
         try {
           setLoading(true);
-          const rs = await scheduleService.deleteSchedule(
-            _schedule.id,
-          );
+          const rs = await scheduleService.deleteSchedule(_schedule.id);
           handleGetList();
           toast.success(rs.message);
         } catch (error: any) {
@@ -74,7 +88,9 @@ const ScheduleTab: React.FC<IProps> = ({ id }) => {
       dataIndex: 'courtNumber',
       align: 'center',
       key: 'courtNumber',
-      render: (_, record) => <span className="text-xl font-semibold">{record.courtNumber.name}</span>,
+      render: (_, record) => (
+        <span className="text-xl font-semibold">{record.courtNumber.name}</span>
+      ),
     },
     {
       title: 'Thời gian bắt đầu',
@@ -82,7 +98,9 @@ const ScheduleTab: React.FC<IProps> = ({ id }) => {
       align: 'center',
       key: 'startTime',
       render: (_, record) => (
-        <span className="text-sm font-base">{record.timeBooking.startTime}</span>
+        <span className="text-sm font-base">
+          {record.timeBooking.startTime}
+        </span>
       ),
     },
     {
@@ -100,11 +118,13 @@ const ScheduleTab: React.FC<IProps> = ({ id }) => {
       align: 'center',
       key: 'constBooking',
       render: (constBooking: number) => (
-        <span className="text-sm font-base underline text-blue-600">{formatCurrencyVND(constBooking)}</span>
+        <span className="text-sm font-base underline text-blue-600">
+          {formatCurrencyVND(constBooking)}
+        </span>
       ),
     },
     {
-      title: 'Ngày lịch đặt',
+      title: 'Ngày cho thuê',
       dataIndex: 'appointmentDate',
       align: 'center',
       key: 'appointmentDate',
@@ -178,14 +198,12 @@ const ScheduleTab: React.FC<IProps> = ({ id }) => {
     }
   };
 
-  const handleGetList = async () => {
+  const handleGetList = async (queryPram = query) => {
     try {
       setLoading(true);
-      const rs = await scheduleService.getListSchedule(id, query);
+      const rs = await scheduleService.getListSchedule(id, queryPram);
       setListSchedule(rs.data.content);
-      setQuery({ ...query, total: rs.data.totalCount });
-    } catch (error: any) {
-      toast.error(error.message);
+      setQuery({ ...queryPram, total: rs.data.totalCount });
     } finally {
       setLoading(false);
     }
@@ -203,11 +221,11 @@ const ScheduleTab: React.FC<IProps> = ({ id }) => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   React.useEffect(() => {
     handleGetListCourtAndTime();
-  }, [])
+  }, []);
 
   React.useEffect(() => {
     if (id && !query.nameLike) handleGetList();
@@ -221,14 +239,56 @@ const ScheduleTab: React.FC<IProps> = ({ id }) => {
   return (
     <div className="w-full min-h-[320px] flex flex-col justify-start items-center space-y-5">
       <div className="w-full flex flex-row justify-between items-center">
-        <BaseSearch
-          value={query.nameLike!}
-          placeholder="Nhập để tìm kiếm"
-          onHandleChange={(value) => {
-            setQuery({ ...query, nameLike: value });
-          }}
-          onSearch={() => handleGetList()}
-        />
+        <div className="flex flex-row justify-start items-end space-x-3 w-full">
+          <BaseSearch
+            value={query.nameLike!}
+            placeholder="Nhập để tìm kiếm"
+            onHandleChange={(value) => {
+              setQuery({ ...query, nameLike: value });
+            }}
+            onSearch={() => handleGetList()}
+          />
+          <Select
+            placeholder="Lọc theo sân"
+            allowClear
+            value={query.courtNumberId}
+            onChange={(value) => {
+              const newQuery = {
+                ...query,
+                courtNumberId: value,
+                page: 1,
+              };
+              setQuery(newQuery);
+              handleGetList(newQuery);
+            }}
+          >
+            {listCourtNumber.map((court) => (
+              <Select.Option key={court.id} value={court.id}>
+                {court.name}
+              </Select.Option>
+            ))}
+          </Select>
+          <Select
+            placeholder="Lọc theo ca cho thuê"
+            allowClear
+            value={query.timeBookingId}
+            onChange={(value) => {
+              const newQuery = {
+                ...query,
+                timeBookingId: value,
+                page: 1,
+              };
+              setQuery(newQuery);
+              handleGetList(newQuery);
+            }}
+          >
+            {listTimeBooking.map((time) => (
+              <Select.Option key={time.id} value={time.id}>
+                {time.startTime} đến {time.endTime}
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
         <Button
           type="primary"
           variant="filled"
@@ -258,12 +318,13 @@ const ScheduleTab: React.FC<IProps> = ({ id }) => {
               pageSize: query.limit,
               total: query.total ?? 0,
               onChange: (page, limit) => {
-                setQuery((pre) => ({
-                  ...pre,
+                const newQuery = {
+                  ...query,
                   page,
                   limit,
-                }));
-                handleGetList();
+                };
+                setQuery(newQuery);
+                handleGetList(newQuery);
               },
             }}
           />

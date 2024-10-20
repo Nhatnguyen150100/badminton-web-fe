@@ -18,7 +18,6 @@ export default function InfoTab({ id }: IProps) {
   const [courtDetail, setCourtDetail] = React.useState<IBadmintonCourt>();
 
   const handleSubmit = async (data: FormData) => {
-    console.log('🚀 ~ handleSubmit ~ data:', data);
     try {
       setLoading(true);
       const rs = await badmintonCourtService.updateBadmintonCourt(id, data);

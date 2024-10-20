@@ -23,7 +23,7 @@ const ClickableMap: React.FC<{
 
 interface IProps {
   location?: ILatLng;
-  handleClickMap: (latlng: ILatLng | null) => void;
+  handleClickMap?: (latlng: ILatLng | null) => void;
 }
 
 const checkLatLng = (position: ILatLng | null): ILatLng | null => {
@@ -43,10 +43,14 @@ export default function HanoiMap({ location, handleClickMap }: IProps) {
 
   return (
     <MapContainer
-      center={Boolean(checkLatLng(location ?? null)) ? [location!.lat, location!.lng] : [21.0285, 105.804]}
+      center={
+        Boolean(checkLatLng(location ?? null))
+          ? [location!.lat, location!.lng]
+          : [21.0285, 105.804]
+      }
       zoom={13}
       style={{ height: '400px', width: '100%' }}
-      className='cursor-map'
+      className="cursor-map"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -54,8 +58,10 @@ export default function HanoiMap({ location, handleClickMap }: IProps) {
       />
       <ClickableMap
         setMarkerPosition={(latlng) => {
-          setMarkerPosition(latlng);
-          handleClickMap(latlng);
+          if (handleClickMap) {
+            handleClickMap(latlng);
+            setMarkerPosition(latlng);
+          }
         }}
       />
       {markerPosition && (

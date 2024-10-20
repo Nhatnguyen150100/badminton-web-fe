@@ -49,6 +49,10 @@ export default function TheHeader() {
     navigate(DEFINE_ROUTERS_USER.badmintonCourtManager);
   };
 
+  const handleNavigateUserBooking = () => {
+    navigate(DEFINE_ROUTERS_USER.userBooking);
+  };
+
   const contentPopover = useMemo((): React.ReactNode => {
     return (
       <>
@@ -71,6 +75,15 @@ export default function TheHeader() {
             onClick={handleNavigateBadmintonCourt}
           >
             <InfoCircleOutlined /> Đăng tin thuê sân
+          </Button>
+          <Divider variant="solid" className="my-2" />
+          <Button
+            variant="text"
+            color="default"
+            className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
+            onClick={handleNavigateUserBooking}
+          >
+            <InfoCircleOutlined /> Sân đã thuê
           </Button>
           <Divider variant="solid" className="my-2" />
           <Button

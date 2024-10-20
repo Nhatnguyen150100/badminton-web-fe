@@ -12,8 +12,13 @@ import {
 import CourtMapPost from '../../../components/base/CourtMapPost';
 import DATA from '../../../mock/dvhc.json';
 import { ISelectType } from '../../../types/select.types';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../lib/store';
 
 export default function ListBadmintonCourtPost() {
+  const user = useSelector((state: IRootState) => state.user);
+  const navigate = useNavigate();
   const [listCourt, setListCourt] = React.useState<IBadmintonCourt[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<IBaseQuery>({
@@ -69,7 +74,7 @@ export default function ListBadmintonCourtPost() {
   return (
     <>
       <div className="flex flex-row justify-between items-center mb-5 w-full">
-        <div className='space-x-3'>
+        <div className="space-x-3">
           <Select
             className="min-w-[120px]"
             placeholder="Lọc theo quận/huyện"
@@ -95,9 +100,7 @@ export default function ListBadmintonCourtPost() {
             disabled={!query?.district}
             placeholder="Lọc theo phường/xã"
             allowClear
-            onChange={(value) =>
-              setQuery((pre) => ({ ...pre, ward: value }))
-            }
+            onChange={(value) => setQuery((pre) => ({ ...pre, ward: value }))}
             value={query.ward}
           >
             {wardData!.map((ward) => (
@@ -128,17 +131,22 @@ export default function ListBadmintonCourtPost() {
             {listCourt.map((court) => (
               <div
                 key={court.id}
+                onClick={() => {
+                  if (!user.id) {
+                    message.error('Vui lòng đăng nhập để xem thông tin sân');
+                    return;
+                  }
+                  navigate(`/court-post/${court.id}`);
+                }}
                 className="flex flex-row justify-start items-start rounded-2xl shadow-xl p-5 space-x-5 cursor-pointer border border-solid hover:border-dashed hover:border hover:border-blue-500"
               >
                 <img
-                  className="h-full max-w-[260px] rounded-xl object-contain"
+                  className="max-h-[120px] max-w-[260px] rounded-xl object-contain"
                   src={court.imageCourt}
                   alt="Ảnh sân"
                 />
-                <div className="flex flex-col justify-start items-start space-y-3">
-                  <h1 className="capitalize text-2xl font-bold">
-                    {court.name}
-                  </h1>
+                <div className="flex flex-col justify-start items-start space-y-1">
+                  <h1 className="capitalize text-xl font-bold">{court.name}</h1>
                   <div className="flex flex-row justify-start items-center space-x-2">
                     <CompassOutlined style={{ color: 'red' }} />
                     <span>{`${onGetDistrictName(

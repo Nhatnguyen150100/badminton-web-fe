@@ -16,7 +16,7 @@ export default function CourtMapPost({ listLocation }: IProps) {
   return (
     <MapContainer
       center={[21.0285, 105.83]}
-      zoom={13}
+      zoom={12}
       style={{ height: '100%', width: '100%' }}
       className="cursor-map"
     >

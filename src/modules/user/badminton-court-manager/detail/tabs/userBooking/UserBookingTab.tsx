@@ -75,6 +75,10 @@ export default function UserBookingTab({ id }: IProps) {
       okText: 'Đồng ý',
       okType: 'primary',
       cancelText: 'Hủy',
+      style: {
+        top: '50%',
+        transform: 'translateY(-50%)',
+      },
       onOk: async () => {
         try {
           const rs =
@@ -102,16 +106,10 @@ export default function UserBookingTab({ id }: IProps) {
 
   const columns: TableProps<IUserBookingDetailByAdmin>['columns'] = [
     {
-      title: 'Số thứ tự',
-      key: 'index',
-      render: (_: any, __: any, index: number) =>
-        (query.page! - 1) * query.limit! + index + 1,
-    },
-    {
       title: 'Tên người đặt',
       key: 'userName',
       render: (_, record) => (
-        <span className="text-xl font-semibold">
+        <span className="text-md font-semibold">
           {record.user?.fullName ?? record.user?.email}
         </span>
       ),
@@ -123,7 +121,7 @@ export default function UserBookingTab({ id }: IProps) {
         <Tooltip title="Nhấn để gọi">
           <a
             href={`tel:${record.user?.phoneNumber}`}
-            className="text-lg font-semibold text-blue-500 underline"
+            className="text-md font-semibold text-blue-500 underline"
           >
             {record.user?.phoneNumber}
           </a>
@@ -134,7 +132,7 @@ export default function UserBookingTab({ id }: IProps) {
       title: 'Sân cầu',
       key: 'courtName',
       render: (_, record) => (
-        <span className="text-xl font-semibold">
+        <span className="text-md font-semibold">
           {record.schedule.courtNumber.name}
         </span>
       ),
@@ -145,7 +143,7 @@ export default function UserBookingTab({ id }: IProps) {
       align: 'center',
       key: 'startTime',
       render: (_, record) => (
-        <div className="flex flex-row justify-center items-center space-x-1">
+        <div className="text-md flex flex-row justify-center items-center space-x-1">
           <span>{record.schedule.timeBooking.startTime}</span>
           <span>đến</span>
           <span>{record.schedule.timeBooking.endTime}</span>
@@ -171,6 +169,17 @@ export default function UserBookingTab({ id }: IProps) {
       render: (_, record) => (
         <span className="text-sm font-base underline text-blue-600">
           {formatCurrencyVND(record.schedule.constBooking)}
+        </span>
+      ),
+    },
+    {
+      title: 'Ghi chú của người đặt',
+      dataIndex: 'note',
+      align: 'center',
+      key: 'note',
+      render: (note) => (
+        <span>
+          {note}
         </span>
       ),
     },

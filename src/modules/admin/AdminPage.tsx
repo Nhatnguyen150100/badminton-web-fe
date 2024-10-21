@@ -60,6 +60,10 @@ export default function AdminPage({}: Props) {
       okText: 'Đồng ý',
       okType: 'danger',
       cancelText: 'Hủy',
+      style: {
+        top: '50%',
+        transform: 'translateY(-50%)',
+      },
       onOk: async () => {
         try {
           const rs = await badmintonCourtService.deleteBadmintonCourt(
@@ -102,6 +106,10 @@ export default function AdminPage({}: Props) {
       okText: 'Đồng ý',
       okType: 'primary',
       cancelText: 'Hủy',
+      style: {
+        top: '50%',
+        transform: 'translateY(-50%)',
+      },
       onOk: async () => {
         try {
           const rs = await badmintonCourtService.updateStatusBadmintonCourt(

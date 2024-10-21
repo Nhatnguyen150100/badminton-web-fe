@@ -60,6 +60,10 @@ export default function ListCourtBooking() {
       okText: 'Đồng ý',
       okType: 'primary',
       cancelText: 'Hủy',
+      style: {
+        top: '50%',
+        transform: 'translateY(-50%)',
+      },
       onOk: async () => {
         try {
           const rs = await userBookingService.cancelUserBooking(_record.id)

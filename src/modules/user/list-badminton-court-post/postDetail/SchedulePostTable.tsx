@@ -30,6 +30,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../lib/store';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
+import BookingForm from './BookingForm';
 
 interface IProps {
   id: string;
@@ -38,7 +39,8 @@ interface IProps {
 
 export default function SchedulePostTable({ id, userId }: IProps) {
   const user = useSelector((state: IRootState) => state.user);
-  const [note, setNote] = React.useState<string>('');
+  const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
+  const [scheduleBooking, setScheduleBooking] = React.useState<ISchedule>();
   const [listSchedule, setListSchedule] = React.useState<ISchedule[]>([]);
   const [listTimeBooking, setListTimeBooking] = React.useState<ITimeBooking[]>(
     [],
@@ -98,44 +100,28 @@ export default function SchedulePostTable({ id, userId }: IProps) {
       toast.error('Bạn không thể đặt lịch cho chính bạn!');
       return;
     }
-    Modal.confirm({
-      title: 'Bạn có muốn đặt lịch này',
-      content: (
-        <div className="flex flex-col justify-start items-start space-y-5">
-          <span>
-            Lịch sân : {record.courtNumber.name} vào lúc{' '}
-            {record.timeBooking.startTime} đến {record.timeBooking.endTime}
-          </span>
-          <TextArea
-            placeholder="Ghi chú"
-            onChange={(e) => {
-              setNote(e.target.value);
-            }}
-          />
-        </div>
-      ),
-      okText: 'Đồng ý',
-      okType: 'primary',
-      cancelText: 'Hủy',
-      style: {
-        top: '50%',
-        transform: 'translateY(-50%)',
-      },
-      onOk: async () => {
-        try {
-          setLoading(true);
-          const rs = await userBookingService.createUserBooking({
-            userId: user.id,
-            scheduleId: record.id,
-            note,
-          });
-          setNote('');
-          toast.success(rs.message);
-        } finally {
-          setLoading(false);
-        }
-      },
-    });
+    setScheduleBooking(record);
+    setIsOpenModal(true);
+  };
+
+  const handleBooking = async (note = '') => {
+    if (!scheduleBooking) {
+      toast.error('Chưa chọn lịch đặt');
+      return;
+    }
+    try {
+      setLoading(true);
+      const rs = await userBookingService.createUserBooking({
+        userId: user.id,
+        scheduleId: scheduleBooking.id,
+        note,
+      });
+      setScheduleBooking(undefined);
+      setIsOpenModal(false);
+      toast.success(rs.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const columns: TableProps<ISchedule>['columns'] = [
@@ -214,7 +200,7 @@ export default function SchedulePostTable({ id, userId }: IProps) {
     },
   ];
   return (
-    <div className="w-full min-h-[320px] flex flex-col justify-start items-center space-y-5">
+    <div className="w-full flex flex-col justify-start items-center space-y-5">
       <div className="flex flex-row justify-start items-center space-x-3 w-full">
         <Select
           placeholder="Lọc theo sân"
@@ -323,6 +309,17 @@ export default function SchedulePostTable({ id, userId }: IProps) {
             }}
           />
         </div>
+      </Visibility>
+      <Visibility visibility={Boolean(scheduleBooking && isOpenModal)}>
+        <BookingForm
+          isOpenModal={isOpenModal}
+          record={scheduleBooking!}
+          handleOk={handleBooking}
+          handleClose={() => {
+            setIsOpenModal(false);
+            setScheduleBooking(undefined);
+          }}
+        />
       </Visibility>
     </div>
   );

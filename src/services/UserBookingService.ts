@@ -74,6 +74,17 @@ class UserBookingService {
       return Promise.reject(error);
     }
   }
+
+  public async cancelUserBooking(id: string): Promise<IBaseResponse<any>> {
+    try {
+      const rs = await axiosRequest.put(
+        `${this._prefixURL}/cancel-booking/${id}`,
+      );
+      return Promise.resolve(rs.data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }
 
 export default UserBookingService;

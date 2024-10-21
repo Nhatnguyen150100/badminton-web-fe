@@ -9,6 +9,7 @@ import DEFINE_MODAL_NAME from '../../../constants/modal-name';
 import { setModalActive } from '../../../lib/reducer/generalSlice';
 import { IGeneral } from '../../../types/general.types';
 import BaseModal from '../../../components/base/BaseModal';
+import GeneralLoading from '../../../components/base/GeneralLoading';
 
 export default function ModalLogin() {
   const dispatch = useDispatch();
@@ -110,6 +111,7 @@ export default function ModalLogin() {
           </div>
         </form>
       </BaseModal>
+      <GeneralLoading isLoading={loading}/>
     </>
   );
 }

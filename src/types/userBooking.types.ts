@@ -13,14 +13,14 @@ export interface IUserBooking {
 }
 
 export interface IUserBookingDetail {
+  id: string;
   status: IStatusLabel;
+  note: string;
   schedule: IScheduleUserBooking;
 }
 
 export interface IUserBookingDetailByAdmin extends IUserBookingDetail {
   user: IUser;
-  id: string;
-  note: string;
 }
 
 interface IScheduleUserBooking {

@@ -29,7 +29,7 @@ interface IProps {
 
 export default function SchedulePostTable({ id, userId }: IProps) {
   const user = useSelector((state: IRootState) => state.user);
-  const [note, setNote] = React.useState<string>();
+  const [note, setNote] = React.useState<string>('');
   const [listSchedule, setListSchedule] = React.useState<ISchedule[]>([]);
   const [listTimeBooking, setListTimeBooking] = React.useState<ITimeBooking[]>(
     [],

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { setModalActive } from '../../../lib/reducer/generalSlice';
 import DEFINE_MODAL_NAME from '../../../constants/modal-name'
 import BaseModal from '../../../components/base/BaseModal';
+import GeneralLoading from '../../../components/base/GeneralLoading';
 
 export default function ModalRegister() {
   const dispatch = useDispatch();
@@ -123,6 +124,7 @@ export default function ModalRegister() {
           </div>
         </form>
       </BaseModal>
+      <GeneralLoading isLoading={loading}/>
     </>
   );
 }

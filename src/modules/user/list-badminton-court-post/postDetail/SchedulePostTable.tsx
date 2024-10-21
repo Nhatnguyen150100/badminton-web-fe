@@ -4,7 +4,15 @@ import { IScheduleStatusLabel } from '../../../../types/status.types';
 import { onChooseStatusSchedule } from '../../../../utils/on-choose-status-schedule';
 import { formatDate } from '../../../../utils/functions/format-date';
 import { formatCurrencyVND } from '../../../../utils/functions/format-money';
-import { Empty, Modal, Select, Spin, Table, TableProps } from 'antd';
+import {
+  DatePicker,
+  Empty,
+  Modal,
+  Select,
+  Spin,
+  Table,
+  TableProps,
+} from 'antd';
 import { IBaseQuery } from '../../../../types/query.types';
 import {
   courtNumberService,
@@ -21,6 +29,7 @@ import { DEFINE_SCHEDULE_STATUS } from '../../../../constants/status';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../lib/store';
 import TextArea from 'antd/es/input/TextArea';
+import dayjs from 'dayjs';
 
 interface IProps {
   id: string;
@@ -44,6 +53,7 @@ export default function SchedulePostTable({ id, userId }: IProps) {
     courtNumberId: undefined,
     timeBookingId: undefined,
     status: undefined,
+    appointmentDate: undefined,
   });
 
   const handleGetList = async (queryPram = query) => {
@@ -246,6 +256,24 @@ export default function SchedulePostTable({ id, userId }: IProps) {
             </Select.Option>
           ))}
         </Select>
+        <DatePicker
+          placeholder="Tìm kiếm theo ngày"
+          value={
+            query?.appointmentDate
+              ? dayjs(query.appointmentDate.toString())
+              : null
+          }
+          onChange={(value) => {
+            const newQuery = {
+              ...query,
+              appointmentDate: value,
+              page: 1,
+            };
+            setQuery(newQuery);
+            handleGetList(newQuery);
+          }}
+          format={'DD/MM/YYYY'}
+        />
         <Select
           placeholder="Lọc theo trạng thái lịch"
           allowClear

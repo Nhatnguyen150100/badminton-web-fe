@@ -49,6 +49,10 @@ export default function TheHeader() {
     navigate(DEFINE_ROUTERS_USER.badmintonCourtManager);
   };
 
+  const handleNavigateBadmintonGather = () => {
+    navigate(DEFINE_ROUTERS_USER.badmintonGatherManager);
+  };
+
   const handleNavigateUserBooking = () => {
     navigate(DEFINE_ROUTERS_USER.userBooking);
   };
@@ -81,6 +85,15 @@ export default function TheHeader() {
             variant="text"
             color="default"
             className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
+            onClick={handleNavigateBadmintonGather}
+          >
+            <InfoCircleOutlined /> Đăng tin giao lưu
+          </Button>
+          <Divider variant="solid" className="my-2" />
+          <Button
+            variant="text"
+            color="default"
+            className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
             onClick={handleNavigateUserBooking}
           >
             <InfoCircleOutlined /> Sân đã thuê
@@ -104,11 +117,11 @@ export default function TheHeader() {
     <header>
       <ModalLogin />
       <ModalRegister />
-      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-4 dark:bg-gray-800">
+      <nav className="border-gray-200 px-4 lg:px-6 py-4 bg-gray-800">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <a href={DEFINE_ROUTERS_USER.home} className="flex items-center">
             <img src="/logo.png" className="mr-3 h-6 sm:h-9" alt="Logo" />
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
               Web cầu lông
             </span>
           </a>
@@ -150,7 +163,7 @@ export default function TheHeader() {
               }
             >
               <Popover content={contentPopover} trigger="click">
-                <a className="hover:cursor-pointer text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-1 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                <a className="hover:cursor-pointer text-white focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-1 mr-2 hover:bg-gray-700 focus:outline-none">
                   <Avatar
                     size={50}
                     crossOrigin="anonymous"
@@ -168,7 +181,7 @@ export default function TheHeader() {
             <button
               data-collapse-toggle="mobile-menu-2"
               type="button"
-              className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-2 ml-1 text-sm rounded-lg lg:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
               aria-controls="mobile-menu-2"
               aria-expanded="false"
             >
@@ -209,11 +222,11 @@ export default function TheHeader() {
               <li>
                 <Link
                   to={DEFINE_ROUTERS_USER.home}
-                  className={`block py-2 px-4 mx-8 text-base font-medium text-gray-800 border-b border-gray-100 hover:bg-gray-50 ${
+                  className={`block py-2 px-4 mx-8 text-base font-medium text-gray-500 border-b border-gray-100 hover:bg-gray-50 ${
                     DEFINE_ROUTERS_USER.home === location.pathname
                       ? '!text-white font-bold'
                       : ''
-                  } lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700`}
+                  }lg:border-0 lg:hover:text-primary-700 lg:p-0 text-gray-400 lg:hover:text-white hover:bg-gray-700 hover:text-white lg:hover:bg-transparent border-gray-700`}
                 >
                   Tìm sân đấu
                 </Link>
@@ -221,11 +234,11 @@ export default function TheHeader() {
               <li>
                 <Link
                   to={DEFINE_ROUTERS_USER.listPostBooking}
-                  className={`block py-2 px-4 mx-8 text-base font-medium text-gray-800 border-b border-gray-100 hover:bg-gray-50 ${
+                  className={`block py-2 px-4 mx-8 text-base font-medium text-gray-500 border-b border-gray-100 hover:bg-gray-50 ${
                     DEFINE_ROUTERS_USER.listPostBooking === location.pathname
                       ? '!text-white font-bold'
                       : ''
-                  } lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700`}
+                  }lg:border-0 lg:hover:text-primary-700 lg:p-0 text-gray-400 lg:hover:text-white hover:bg-gray-700 hover:text-white lg:hover:bg-transparent border-gray-700`}
                 >
                   Tìm giao lưu
                 </Link>

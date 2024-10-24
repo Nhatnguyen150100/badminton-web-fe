@@ -8,8 +8,11 @@ const DEFINE_ROUTERS_USER = {
   courtPostDetail: '/court-post/:id',
   profile: '/profile',
   badmintonCourtManager: '/badminton-court-manager',
+  badmintonGatherManager: '/badminton-gather-manager',
+  badmintonGatherDetail: '/badminton-gather-manager/:id',
   badmintonCourtDetail: '/badminton-court-manager/:id',
   newBadmintonCourt: '/new-badminton-court',
+  newBadmintonGather: '/new-badminton-gather',
   listPostBooking: '/booking',
   userBooking: '/my-booking',
 };

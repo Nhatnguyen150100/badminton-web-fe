@@ -1,5 +1,6 @@
 import AuthService from './authService';
 import BadmintonCourtService from './badmintonCourtService';
+import BadmintonGatherService from './badmintonGatherService';
 import CourtNumberService from './courtNumberService';
 import ProfileService from './profileService';
 import ScheduleService from './scheduleService';
@@ -13,3 +14,4 @@ export const courtNumberService = new CourtNumberService();
 export const timeBookingService = new TimeBookingService();
 export const scheduleService = new ScheduleService();
 export const userBookingService = new UserBookingService();
+export const badmintonGatherService = new BadmintonGatherService();

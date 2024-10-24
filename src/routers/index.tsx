@@ -8,7 +8,6 @@ import {
 } from '../constants/routers-mapper';
 import Profile from '../modules/user/profile/Profile';
 import BadmintonCourtRoot from '../modules/user/badminton-court-manager/BadmintonCourtRoot';
-import ListBookingCourtPost from '../modules/user/list-booking-court-post/ListBookingCourtPost';
 import CreateBadmintonCourt from '../modules/user/badminton-court-manager/CreateBadmintonCourt';
 import BadmintonCourtDetail from '../modules/user/badminton-court-manager/detail/BadmintonCourtDetail';
 import AdminPage from '../modules/admin/AdminPage';
@@ -18,6 +17,7 @@ import ListCourtBooking from '../modules/user/user-booking/ListCourtBooking';
 import BadmintonGatherManager from '../modules/user/badminton-gather-manager/BadmintonGatherManager';
 import CreateBadmintonGather from '../modules/user/badminton-gather-manager/CreateBadmintonGather';
 import BadmintonGatherDetail from '../modules/user/badminton-gather-manager/detail/BadmintonGatherDetail';
+import ListBadmintonGatherPost from '../modules/user/list-badminton-gather-post/ListBookingCourtPost';
 
 const router = createBrowserRouter([
   {
@@ -35,8 +35,8 @@ const router = createBrowserRouter([
         element: <PostDetail />,
       },
       {
-        path: DEFINE_ROUTERS_USER.listPostBooking,
-        element: <ListBookingCourtPost />,
+        path: DEFINE_ROUTERS_USER.listGatherPost,
+        element: <ListBadmintonGatherPost />,
       },
       {
         path: DEFINE_ROUTERS_USER.profile,

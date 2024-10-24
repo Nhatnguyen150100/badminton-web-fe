@@ -13,7 +13,7 @@ const DEFINE_ROUTERS_USER = {
   badmintonCourtDetail: '/badminton-court-manager/:id',
   newBadmintonCourt: '/new-badminton-court',
   newBadmintonGather: '/new-badminton-gather',
-  listPostBooking: '/booking',
+  listGatherPost: '/gather-post',
   userBooking: '/my-booking',
 };
 

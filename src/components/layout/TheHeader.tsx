@@ -233,9 +233,9 @@ export default function TheHeader() {
               </li>
               <li>
                 <Link
-                  to={DEFINE_ROUTERS_USER.listPostBooking}
+                  to={DEFINE_ROUTERS_USER.listGatherPost}
                   className={`block py-2 px-4 mx-8 text-base font-medium text-gray-500 border-b border-gray-100 hover:bg-gray-50 ${
-                    DEFINE_ROUTERS_USER.listPostBooking === location.pathname
+                    DEFINE_ROUTERS_USER.listGatherPost === location.pathname
                       ? '!text-white font-bold'
                       : ''
                   }lg:border-0 lg:hover:text-primary-700 lg:p-0 text-gray-400 lg:hover:text-white hover:bg-gray-700 hover:text-white lg:hover:bg-transparent border-gray-700`}

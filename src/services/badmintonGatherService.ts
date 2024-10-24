@@ -51,18 +51,18 @@ class BadmintonGatherService {
     }
   }
 
-  // public async getBadmintonCourtPost(
-  //   query: IBaseQuery,
-  // ): Promise<IBaseResponse<IBaseResponseList<IBadmintonCourt[]>>> {
-  //   try {
-  //     const rs = await axiosRequest.get(this._prefixURL, {
-  //       params: onRemoveParams(query),
-  //     });
-  //     return Promise.resolve(rs.data);
-  //   } catch (error) {
-  //     return Promise.reject(error);
-  //   }
-  // }
+  public async getBadmintonGatherList(
+    query: IBaseQuery,
+  ): Promise<IBaseResponse<IBaseResponseList<IBadmintonGather[]>>> {
+    try {
+      const rs = await axiosRequest.get(`${this._prefixURL}/`, {
+        params: onRemoveParams(query),
+      });
+      return Promise.resolve(rs.data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 
   public async getBadmintonGatherDetail(
     id: string,

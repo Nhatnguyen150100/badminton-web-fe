@@ -154,9 +154,9 @@ export default function CreateOrEditBadmintonGather({
         <div className="grid grid-cols-2 gap-x-4">
           <div>
             <Form.Item<FieldType>
-              label="Tên câu lạc bộ"
+              label="Tiêu đề bài đăng"
               name="nameClub"
-              rules={[{ required: true, message: 'Hãy nhập tên câu lạc bộ' }]}
+              rules={[{ required: true, message: 'Hãy nhập tiêu đề bài đăng' }]}
             >
               <Input size="large" />
             </Form.Item>

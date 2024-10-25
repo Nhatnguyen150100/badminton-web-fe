@@ -7,6 +7,7 @@ import Visibility from './visibility';
 interface IProps {
   imgProps: string | null;
   file: File | undefined;
+  disabled?: boolean;
   handleUploadFile: (file: File | undefined) => void;
 }
 
@@ -28,6 +29,7 @@ const styleImg = {
 export default function ImgUpload({
   imgProps,
   file,
+  disabled,
   handleUploadFile,
 }: IProps) {
   const onDrop = (acceptedFiles: File[]) => {
@@ -44,6 +46,7 @@ export default function ImgUpload({
       <div className="border-dashed border-[2px] border-[#d9d9d9] h-[280px] relative">
         <Tooltip title="Xóa ảnh">
           <Button
+            disabled={disabled}
             className="ms-3 absolute right-0"
             variant="solid"
             color="danger"

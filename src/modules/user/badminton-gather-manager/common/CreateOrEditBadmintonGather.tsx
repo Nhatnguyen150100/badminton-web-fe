@@ -2,7 +2,18 @@ import * as React from 'react';
 import { IBadmintonGather } from '../../../../types/badmintonGather.types';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../lib/store';
-import { Button, DatePicker, Form, FormProps, Input, Select, TimePicker } from 'antd';
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Form,
+  FormProps,
+  Input,
+  InputNumber,
+  Radio,
+  Select,
+  TimePicker,
+} from 'antd';
 import DATA from '../../../../mock/dvhc.json';
 import { ISelectType } from '../../../../types/select.types';
 import { toast } from 'react-toastify';
@@ -13,6 +24,11 @@ import ImgUpload from '../../../../components/base/ImgUpload';
 import HanoiMap from '../../../../components/base/HanoiMap';
 import { ILatLng } from '../../../../types/badmintonCourt.types';
 import { DEFINE_GATHER_LEVEL_ARRAY } from '../../../../constants/level-gather';
+import { userBookingService } from '../../../../services';
+import { DEFINE_STATUS } from '../../../../constants/status';
+import { IUserBookingDetail } from '../../../../types/userBooking.types';
+import Visibility from '../../../../components/base/visibility';
+import { formatter, parser } from '../../../../utils/input-format-money';
 
 interface IProps {
   badmintonGather?: IBadmintonGather;
@@ -42,6 +58,19 @@ export default function CreateOrEditBadmintonGather({
   badmintonGather,
   handleSubmit,
 }: IProps) {
+  const [gatherType, setGatherType] = React.useState<
+    'FROM_SCHEDULE' | 'CUSTOM'
+  >('CUSTOM');
+  const [listUserBooking, setListUserBooking] = React.useState<
+    IUserBookingDetail[]
+  >([]);
+  const [selectedScheduleId, setSelectedScheduleId] = React.useState<string>();
+  const [peopleType, setPeopleType] = React.useState<'MALE' | 'FEMALE' | 'ALL'>(
+    'ALL',
+  );
+  const [priceNegotiable, setPriceNegotiable] = React.useState<boolean>(
+    Boolean(badmintonGather?.priceNegotiable),
+  );
   const user = useSelector((state: IRootState) => state.user);
   const [file, setFile] = React.useState<File>();
   const [currentImg, setCurrentImg] = React.useState<string | null>(
@@ -75,6 +104,39 @@ export default function CreateOrEditBadmintonGather({
     );
   }, [district]);
 
+  React.useEffect(() => {
+    if (selectedScheduleId) {
+      const schedule = listUserBooking.find(
+        (item) => item.id === selectedScheduleId,
+      )!;
+      form.setFieldValue(
+        'badmintonCourtName',
+        schedule.schedule.badmintonCourt.name,
+      );
+      form.setFieldValue('district', schedule.schedule.badmintonCourt.district);
+      form.setFieldValue('ward', schedule.schedule.badmintonCourt.ward);
+      form.setFieldValue('address', schedule.schedule.badmintonCourt.address);
+      setLocation({
+        lat: Number(schedule.schedule.badmintonCourt.lat),
+        lng: Number(schedule.schedule.badmintonCourt.lang),
+      });
+      setCurrentImg(schedule.schedule.badmintonCourt.imageCourt);
+      form.setFieldValue('courtNumber', schedule.schedule.courtNumber.name);
+      form.setFieldValue(
+        'startTime',
+        dayjs(schedule.schedule.timeBooking.startTime, FORMAT_TIME),
+      );
+      form.setFieldValue(
+        'endTime',
+        dayjs(schedule.schedule.timeBooking.endTime, FORMAT_TIME),
+      );
+      form.setFieldValue(
+        'appointmentDate',
+        dayjs(schedule.schedule.appointmentDate),
+      );
+    }
+  }, [selectedScheduleId]);
+
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const data = { ...values };
     if (!user.id) {
@@ -95,13 +157,15 @@ export default function CreateOrEditBadmintonGather({
     formData.append('startTime', dayjs(data.startTime).format(FORMAT_TIME));
     formData.append('endTime', dayjs(data.endTime).format(FORMAT_TIME));
     formData.append('appointmentDate', data.appointmentDate.toString());
-    formData.append('totalMale', data.totalMale.toString());
-    formData.append('totalFemale', data.totalFemale.toString());
-    formData.append('constPerMale', data.constPerMale.toString());
-    formData.append('constPerFemale', data.constPerFemale.toString());
+    formData.append('totalMale', data.totalMale?.toString());
+    formData.append('totalFemale', data.totalFemale?.toString());
+    formData.append('constPerMale', data.constPerMale?.toString());
+    formData.append('constPerFemale', data.constPerFemale?.toString());
+    formData.append('priceNegotiable', priceNegotiable.toString());
     formData.append('level', data.level);
 
     if (file) formData.append('imgCourt', file);
+    if (currentImg) formData.append('imgCourt', currentImg);
     handleSubmit(formData);
   };
 
@@ -117,8 +181,53 @@ export default function CreateOrEditBadmintonGather({
     });
   };
 
+  const handleGetListSchedule = async () => {
+    const rs = await userBookingService.getListUserBookingByUser(user.id, {
+      status: DEFINE_STATUS.ACCEPTED,
+    });
+    setListUserBooking(rs.data.content);
+  };
+
+  const options = React.useMemo(() => {
+    return listUserBooking.map((item) => ({
+      label: (
+        <span>
+          Sân cầu: {item.schedule.badmintonCourt.name} từ{' '}
+          {item.schedule.timeBooking.startTime} đến{' '}
+          {item.schedule.timeBooking.endTime}
+        </span>
+      ),
+      value: item.id,
+    }));
+  }, [listUserBooking]);
+
   return (
     <div className="w-full pe-10">
+      <div className="flex flex-col justify-start items-start">
+        <Radio.Group
+          className="mt-4"
+          onChange={(e) => {
+            setGatherType(e.target.value);
+            if (e.target.value === 'FROM_SCHEDULE') handleGetListSchedule();
+          }}
+          value={gatherType}
+        >
+          <Radio value={'CUSTOM'}>Tự nhập lịch</Radio>
+          <Radio value={'FROM_SCHEDULE'}>Chọn từ lịch đã đặt</Radio>
+        </Radio.Group>
+        <Visibility visibility={gatherType === 'FROM_SCHEDULE'}>
+          <Select
+            allowClear
+            placeholder="Chọn lịch đã được xác nhận"
+            className="min-w-[340px] mt-4"
+            value={selectedScheduleId}
+            onChange={(value) => {
+              setSelectedScheduleId(value);
+            }}
+            options={options}
+          />
+        </Visibility>
+      </div>
       <Form
         className="w-full mt-5"
         form={form}
@@ -162,11 +271,19 @@ export default function CreateOrEditBadmintonGather({
             </Form.Item>
 
             <Form.Item<FieldType>
+              label="Mô tả câu lạc bộ"
+              name="description"
+              rules={[{ required: true, message: 'Hãy nhập mô tả về sân' }]}
+            >
+              <TextArea rows={7} />
+            </Form.Item>
+
+            <Form.Item<FieldType>
               label="Tên sân cầu"
               name="badmintonCourtName"
               rules={[{ required: true, message: 'Hãy nhập tên sân cầu' }]}
             >
-              <Input />
+              <Input disabled={Boolean(selectedScheduleId)} />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -176,6 +293,7 @@ export default function CreateOrEditBadmintonGather({
             >
               <Select
                 options={districtData}
+                disabled={Boolean(selectedScheduleId)}
                 onChange={(_) => {
                   form.setFieldsValue({ ward: '' });
                 }}
@@ -187,7 +305,10 @@ export default function CreateOrEditBadmintonGather({
               name="ward"
               rules={[{ required: true, message: 'Hãy nhập tên phường/xã' }]}
             >
-              <Select disabled={!district} options={wardData} />
+              <Select
+                disabled={!district || Boolean(selectedScheduleId)}
+                options={wardData}
+              />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -197,7 +318,7 @@ export default function CreateOrEditBadmintonGather({
                 { required: true, message: 'Hãy nhập tên địa chỉ cụ thể' },
               ]}
             >
-              <Input />
+              <Input disabled={Boolean(selectedScheduleId)} />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -207,7 +328,7 @@ export default function CreateOrEditBadmintonGather({
                 { required: true, message: 'Hãy nhập tên sân thi đấu cụ thể' },
               ]}
             >
-              <Input />
+              <Input disabled={Boolean(selectedScheduleId)} />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -215,7 +336,11 @@ export default function CreateOrEditBadmintonGather({
               name="appointmentDate"
               rules={[{ required: true, message: 'Hãy nhập ngày cho thuê' }]}
             >
-              <DatePicker className="w-full" format={'DD/MM/YYYY'} />
+              <DatePicker
+                disabled={Boolean(selectedScheduleId)}
+                className="w-full"
+                format={'DD/MM/YYYY'}
+              />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -224,6 +349,7 @@ export default function CreateOrEditBadmintonGather({
               rules={[{ required: true, message: 'Hãy nhập giờ bắt đầu' }]}
             >
               <TimePicker
+                disabled={Boolean(selectedScheduleId)}
                 className="w-full"
                 format={FORMAT_TIME}
                 placeholder="Chọn thời gian bắt đầu"
@@ -236,21 +362,14 @@ export default function CreateOrEditBadmintonGather({
               rules={[{ required: true, message: 'Hãy nhập giờ kết thúc' }]}
             >
               <TimePicker
+                disabled={Boolean(selectedScheduleId)}
                 className="w-full"
                 format={FORMAT_TIME}
                 placeholder="Chọn thời gian kết thúc"
               />
             </Form.Item>
-
-            <Form.Item<FieldType>
-              label="Mô tả câu lạc bộ"
-              name="description"
-              rules={[{ required: true, message: 'Hãy nhập mô tả về sân' }]}
-            >
-              <TextArea />
-            </Form.Item>
           </div>
-          <div className='flex flex-col'>
+          <div className="flex flex-col">
             <Form.Item<any>
               label={
                 <div className="text-sm space-x-2">
@@ -260,47 +379,69 @@ export default function CreateOrEditBadmintonGather({
               }
             >
               <ImgUpload
+                disabled={Boolean(selectedScheduleId)}
                 imgProps={currentImg}
                 file={file}
                 handleUploadFile={handleUploadFile}
               />
             </Form.Item>
+
             <Form.Item<FieldType>
-              label="Nam cần thuê"
+              label="Chọn nam nữ thuê"
               name="totalMale"
               rules={[
                 { required: true, message: 'Hãy nhập số lượng nam cần thuê' },
               ]}
             >
-              <Input type='number' />
-            </Form.Item>
-            <Form.Item<FieldType>
-              label="Nữ cần thuê"
-              name="totalFemale"
-              rules={[
-                { required: true, message: 'Hãy nhập số lượng nữ cần thuê' },
-              ]}
-            >
-              <Input type='number' />
-            </Form.Item>
-            <Form.Item<FieldType>
-              label="Giá thuê nam"
-              name="constPerMale"
-              rules={[
-                { required: true, message: 'Hãy nhập giá thuê nam' },
-              ]}
-            >
-              <Input type='number' />
+              <div>
+                <Radio.Group
+                  onChange={(e) => {
+                    setPeopleType(e.target.value);
+                  }}
+                  value={peopleType}
+                >
+                  <Radio value={'ALL'}>Cả nam và nữ</Radio>
+                  <Radio value={'MALE'}>Chỉ nam</Radio>
+                  <Radio value={'FEMALE'}>Chỉ nữ</Radio>
+                </Radio.Group>
+              </div>
             </Form.Item>
 
-            <Form.Item<FieldType>
-              label="Giá thuê nữ"
-              name="constPerFemale"
-              rules={[
-                { required: true, message: 'Hãy nhập giá thuê nữ' },
-              ]}
-            >
-              <Input type='number' />
+            <Form.Item<FieldType> label="Nam cần thuê" name="totalMale">
+              <Input type="number" disabled={peopleType === 'FEMALE'} />
+            </Form.Item>
+            <Form.Item<FieldType> label="Nữ cần thuê" name="totalFemale">
+              <Input type="number" disabled={peopleType === 'MALE'} />
+            </Form.Item>
+            <Form.Item<FieldType> label="Giá thuê nam" name="constPerMale">
+              <InputNumber
+                className="w-full"
+                formatter={formatter}
+                parser={parser}
+                disabled={peopleType === 'FEMALE' || priceNegotiable}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Giá thuê nữ" name="constPerFemale">
+              <InputNumber
+                className="w-full"
+                formatter={formatter}
+                parser={parser}
+                disabled={peopleType === 'MALE' || priceNegotiable}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Giá cả">
+              <Checkbox
+                checked={priceNegotiable}
+                onChange={(e) => {
+                  setPriceNegotiable(e.target.checked as boolean);
+                  form.setFieldValue('constPerMale', undefined);
+                  form.setFieldValue('constPerFemale', undefined);
+                }}
+              >
+                Giá cả thỏa thuận
+              </Checkbox>
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -312,8 +453,6 @@ export default function CreateOrEditBadmintonGather({
             >
               <Select options={DEFINE_GATHER_LEVEL_ARRAY} />
             </Form.Item>
-
-
           </div>
         </div>
 

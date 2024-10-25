@@ -33,7 +33,7 @@ export default function BadmintonGatherDetail() {
     <div className="w-full space-y-2">
       <Breadcrumb>
         <Breadcrumb.Item>
-          <Link to={DEFINE_ROUTERS_USER.badmintonCourtManager}>
+          <Link to={DEFINE_ROUTERS_USER.badmintonGatherManager}>
             Danh sách bài đăng
           </Link>
         </Breadcrumb.Item>

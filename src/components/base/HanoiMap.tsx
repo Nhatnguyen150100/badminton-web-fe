@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -9,44 +9,46 @@ import {
 import 'leaflet/dist/leaflet.css';
 import { ILatLng } from '../../types/badmintonCourt.types';
 
-const ClickableMap: React.FC<{
-  setMarkerPosition: (latlng: ILatLng | null) => void;
-}> = ({ setMarkerPosition }) => {
-  useMapEvents({
-    click: (event) => {
-      setMarkerPosition(event.latlng);
-    },
-  });
-
-  return null;
-};
-
 interface IProps {
   location?: ILatLng;
   handleClickMap?: (latlng: ILatLng | null) => void;
 }
 
-const checkLatLng = (position: ILatLng | null): ILatLng | null => {
-  if (!position) {
-    return null;
-  }
-  if (isNaN(position.lat) || isNaN(position.lng)) {
-    return null;
-  }
-  return position;
-};
-
 export default function HanoiMap({ location, handleClickMap }: IProps) {
+  const checkLatLng = useMemo(() => {
+    if (!location) {
+      return null;
+    }
+    if (isNaN(location.lat) || isNaN(location.lng)) {
+      return null;
+    }
+    return location;
+  }, [location]);
+
   const [markerPosition, setMarkerPosition] = useState<ILatLng | null>(
-    checkLatLng(location ?? null),
+    checkLatLng,
   );
+
+  useEffect(() => {
+    if(checkLatLng) setMarkerPosition(checkLatLng);
+  }, [checkLatLng])
+
+  const ClickableMap: React.FC<{
+    setMarkerPosition: (latlng: ILatLng | null) => void;
+  }> = ({ setMarkerPosition }) => {
+    useMapEvents({
+      click: (event) => {
+        setMarkerPosition(event.latlng);
+      },
+    });
+
+    return null;
+  };
 
   return (
     <MapContainer
       center={
-        Boolean(checkLatLng(location ?? null))
-          ? [location!.lat, location!.lng]
-          : [21.0285, 105.804]
+        checkLatLng ? [checkLatLng!.lat, checkLatLng!.lng] : [21.0285, 105.804]
       }
       zoom={13}
       style={{ height: '400px', width: '100%' }}

@@ -17,6 +17,7 @@ export interface IBadmintonGather {
   totalFemale: number;
   constPerMale: number;
   constPerFemale: number;
+  priceNegotiable: number;
   imgCourt: string;
   level: string;
   createdAt: string;

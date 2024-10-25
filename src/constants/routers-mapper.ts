@@ -6,6 +6,7 @@ const DEFINE_ROUTERS_ADMIN = {
 const DEFINE_ROUTERS_USER = {
   home: '/',
   courtPostDetail: '/court-post/:id',
+  gatherPostDetail: '/gather-post/:id',
   profile: '/profile',
   badmintonCourtManager: '/badminton-court-manager',
   badmintonGatherManager: '/badminton-gather-manager',

@@ -17,7 +17,8 @@ import ListCourtBooking from '../modules/user/user-booking/ListCourtBooking';
 import BadmintonGatherManager from '../modules/user/badminton-gather-manager/BadmintonGatherManager';
 import CreateBadmintonGather from '../modules/user/badminton-gather-manager/CreateBadmintonGather';
 import BadmintonGatherDetail from '../modules/user/badminton-gather-manager/detail/BadmintonGatherDetail';
-import ListBadmintonGatherPost from '../modules/user/list-badminton-gather-post/ListBookingCourtPost';
+import ListBadmintonGatherPost from '../modules/user/list-badminton-gather-post/ListBookingGatherPost';
+import GatherPostDetail from '../modules/user/list-badminton-gather-post/postDetail/GatherPostDetail';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: DEFINE_ROUTERS_USER.courtPostDetail,
         element: <PostDetail />,
+      },
+      {
+        path: DEFINE_ROUTERS_USER.gatherPostDetail,
+        element: <GatherPostDetail />,
       },
       {
         path: DEFINE_ROUTERS_USER.listGatherPost,

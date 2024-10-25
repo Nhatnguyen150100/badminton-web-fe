@@ -3,7 +3,10 @@ import { IBadmintonCourt } from '../../../types/badmintonCourt.types';
 import { IBaseQuery } from '../../../types/query.types';
 import Visibility from '../../../components/base/visibility';
 import { Button, Empty, message, Select, Spin } from 'antd';
-import { badmintonCourtService, badmintonGatherService } from '../../../services';
+import {
+  badmintonCourtService,
+  badmintonGatherService,
+} from '../../../services';
 import { CompassOutlined, InfoOutlined } from '@ant-design/icons';
 import {
   onGetDistrictName,
@@ -16,11 +19,12 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../lib/store';
 import { IBadmintonGather } from '../../../types/badmintonGather.types';
+import { DEFINE_ROUTERS_USER } from '../../../constants/routers-mapper';
 
 export default function ListBadmintonGatherPost() {
   const user = useSelector((state: IRootState) => state.user);
   const navigate = useNavigate();
-  const [listCourt, setListCourt] = React.useState<IBadmintonGather[]>([]);
+  const [listGather, setListGather] = React.useState<IBadmintonGather[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<IBaseQuery>({
     limit: 5,
@@ -31,7 +35,7 @@ export default function ListBadmintonGatherPost() {
     try {
       setLoading(true);
       const rs = await badmintonGatherService.getBadmintonGatherList(query);
-      setListCourt(rs.data.content);
+      setListGather(rs.data.content);
       setQuery({ ...query, total: rs.data.totalCount });
     } catch (error: any) {
       message.error(error.message);
@@ -41,12 +45,12 @@ export default function ListBadmintonGatherPost() {
   };
 
   const listMarkers = React.useMemo(() => {
-    return listCourt.map((court) => ({
-      id: court.id,
-      position: [court.lat, court.lang],
-      address: court.address,
+    return listGather.map((gather) => ({
+      id: gather.id,
+      position: [gather.lat, gather.lang],
+      address: gather.address,
     }));
-  }, [listCourt]);
+  }, [listGather]);
 
   React.useEffect(() => {
     handleGetList();
@@ -121,45 +125,52 @@ export default function ListBadmintonGatherPost() {
       </div>
       <div
         className={`h-[calc(100vh-230px)] grid gap-x-3 ${
-          Boolean(listCourt.length) ? 'grid-cols-2' : 'grid-cols-1 w-full'
+          Boolean(listGather.length) ? 'grid-cols-2' : 'grid-cols-1 w-full'
         }`}
       >
         <Visibility
-          visibility={Boolean(listCourt.length)}
+          visibility={Boolean(listGather.length)}
           suspenseComponent={loading ? <Spin /> : <Empty />}
         >
           <div className="h-full overflow-y-auto overflow-x-hidden flex-col justify-center items-start space-y-3">
-            {listCourt.map((court) => (
+            {listGather.map((gather) => (
               <div
-                key={court.id}
+                key={gather.id}
                 onClick={() => {
                   if (!user.id) {
                     message.error('Vui lòng đăng nhập để xem thông tin sân');
                     return;
                   }
-                  navigate(`/court-post/${court.id}`);
+                  navigate(
+                    DEFINE_ROUTERS_USER.gatherPostDetail.replace(
+                      ':id',
+                      gather.id,
+                    ),
+                  );
                 }}
                 className="flex flex-row justify-start items-start rounded-2xl shadow-xl p-5 space-x-5 cursor-pointer border border-solid hover:border-dashed hover:border hover:border-blue-500"
               >
                 <img
                   className="max-h-[120px] max-w-[260px] rounded-xl object-contain"
-                  src={court.imgCourt}
+                  src={gather.imgCourt}
                   alt="Ảnh sân"
                 />
                 <div className="flex flex-col justify-start items-start space-y-1">
-                  <h1 className="capitalize text-xl font-bold">{court.nameClub}</h1>
+                  <h1 className="capitalize text-xl font-bold">
+                    {gather.nameClub}
+                  </h1>
                   <div className="flex flex-row justify-start items-center space-x-2">
                     <CompassOutlined style={{ color: 'red' }} />
                     <span>{`${onGetDistrictName(
-                      court.district,
-                    )} - ${onGetWardName(court.district, court.ward)} - ${
-                      court.address
+                      gather.district,
+                    )} - ${onGetWardName(gather.district, gather.ward)} - ${
+                      gather.address
                     }`}</span>
                   </div>
                   <div className="flex flex-row justify-start items-center space-x-2">
                     <InfoOutlined style={{ color: 'red' }} />
                     <span className="whitespace-pre-wrap capitalize">
-                      {court.description}
+                      {gather.description}
                     </span>
                   </div>
                 </div>
@@ -168,7 +179,7 @@ export default function ListBadmintonGatherPost() {
             <div className="flex justify-center items-center">
               <Visibility
                 visibility={
-                  query?.total ? listCourt?.length < query?.total : true
+                  query?.total ? listGather?.length < query?.total : true
                 }
               >
                 <Button

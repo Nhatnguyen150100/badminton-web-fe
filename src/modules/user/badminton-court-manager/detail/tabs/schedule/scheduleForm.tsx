@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import BaseModal from '../../../../../../components/base/BaseModal';
-import { Button, DatePicker, Form, Input, Select } from 'antd';
+import { Button, DatePicker, Form, Input, InputNumber, Select } from 'antd';
 import { ISchedule } from '../../../../../../types/schedule.types';
 import { ICourtNumber } from '../../../../../../types/courtNumber.types';
 import { ITimeBooking } from '../../../../../../types/timeBooking.types';
 import dayjs from 'dayjs';
+import { formatter, parser } from '../../../../../../utils/input-format-money';
 
 interface IProps {
   isOpenModal: boolean;
@@ -37,7 +38,7 @@ export default function ScheduleForm({
       label: `${time.startTime} đến ${time.endTime}`,
       value: time.id,
     }));
-  }, [listTimeBooking])
+  }, [listTimeBooking]);
 
   const courtSelect = useMemo(() => {
     return listCourtNumber.map((court) => ({
@@ -67,7 +68,9 @@ export default function ScheduleForm({
           initialValues={{
             courtNumberId: editSchedule?.courtNumberId,
             timeBookingId: editSchedule?.timeBookingId,
-            appointmentDate: editSchedule?.appointmentDate ? dayjs(editSchedule?.appointmentDate) : null,
+            appointmentDate: editSchedule?.appointmentDate
+              ? dayjs(editSchedule?.appointmentDate)
+              : null,
             constBooking: editSchedule?.constBooking ?? 0,
           }}
           autoComplete="off"
@@ -77,7 +80,7 @@ export default function ScheduleForm({
             name="courtNumberId"
             rules={[{ required: true, message: 'Hãy nhập tên sân cầu' }]}
           >
-            <Select options={courtSelect}/>
+            <Select options={courtSelect} />
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -85,7 +88,7 @@ export default function ScheduleForm({
             name="timeBookingId"
             rules={[{ required: true, message: 'Hãy nhập thời gian' }]}
           >
-            <Select options={timeSelect}/>
+            <Select options={timeSelect} />
           </Form.Item>
 
           <Form.Item<FieldType>
@@ -93,7 +96,7 @@ export default function ScheduleForm({
             name="constBooking"
             rules={[{ required: true, message: 'Hãy nhập giá cho thuê' }]}
           >
-            <Input type='number'/>
+            <InputNumber className='w-full' formatter={formatter} parser={parser} />
           </Form.Item>
 
           <Form.Item<FieldType>

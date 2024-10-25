@@ -1,8 +1,4 @@
 import axiosRequest from '../plugins/request';
-import {
-  IBadmintonCourt,
-  IQueryBadmintonCourtAdmin,
-} from '../types/badmintonCourt.types';
 import { IBadmintonGather } from '../types/badmintonGather.types';
 import { IBaseQuery } from '../types/query.types';
 import { IBaseResponse, IBaseResponseList } from '../types/response.types';

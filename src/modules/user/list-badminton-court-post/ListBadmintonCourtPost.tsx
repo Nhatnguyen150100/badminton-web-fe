@@ -148,7 +148,11 @@ export default function ListBadmintonCourtPost() {
                 <div className="flex flex-col justify-start items-start space-y-1">
                   <h1 className="capitalize text-xl font-bold">{court.name}</h1>
                   <div className="flex flex-row justify-start items-center space-x-2">
-                    <CompassOutlined style={{ color: 'red' }} />
+                    <img
+                      className="h-[26px]"
+                      alt="location"
+                      src="/icons/location.png"
+                    />
                     <span>{`${onGetDistrictName(
                       court.district,
                     )} - ${onGetWardName(court.district, court.ward)} - ${
@@ -156,7 +160,11 @@ export default function ListBadmintonCourtPost() {
                     }`}</span>
                   </div>
                   <div className="flex flex-row justify-start items-center space-x-2">
-                    <InfoOutlined style={{ color: 'red' }} />
+                    <img
+                      className="h-[26px]"
+                      alt="notes"
+                      src="/icons/notes.png"
+                    />
                     <span className="whitespace-pre-wrap capitalize">
                       {court.description}
                     </span>

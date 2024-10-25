@@ -138,7 +138,7 @@ export default function ListBadmintonGatherPost() {
                 key={gather.id}
                 onClick={() => {
                   if (!user.id) {
-                    message.error('Vui lòng đăng nhập để xem thông tin sân');
+                    message.error('Vui lòng đăng nhập để xem thông tin chi tiết');
                     return;
                   }
                   navigate(
@@ -148,7 +148,7 @@ export default function ListBadmintonGatherPost() {
                     ),
                   );
                 }}
-                className="flex flex-row justify-start items-start rounded-2xl shadow-xl p-5 space-x-5 cursor-pointer border border-solid hover:border-dashed hover:border hover:border-blue-500"
+                className="flex flex-row justify-start items-center rounded-2xl shadow-xl p-5 space-x-5 cursor-pointer border border-solid hover:border-dashed hover:border hover:border-blue-500"
               >
                 <img
                   className="max-h-[120px] max-w-[260px] rounded-xl object-contain"
@@ -160,7 +160,11 @@ export default function ListBadmintonGatherPost() {
                     {gather.nameClub}
                   </h1>
                   <div className="flex flex-row justify-start items-center space-x-2">
-                    <CompassOutlined style={{ color: 'red' }} />
+                    <img
+                      className="h-[26px]"
+                      alt="location"
+                      src="/icons/location.png"
+                    />
                     <span>{`${onGetDistrictName(
                       gather.district,
                     )} - ${onGetWardName(gather.district, gather.ward)} - ${
@@ -168,7 +172,11 @@ export default function ListBadmintonGatherPost() {
                     }`}</span>
                   </div>
                   <div className="flex flex-row justify-start items-center space-x-2">
-                    <InfoOutlined style={{ color: 'red' }} />
+                    <img
+                      className="h-[26px]"
+                      alt="notes"
+                      src="/icons/notes.png"
+                    />
                     <span className="whitespace-pre-wrap capitalize">
                       {gather.description}
                     </span>

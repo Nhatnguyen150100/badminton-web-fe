@@ -1,3 +1,6 @@
+import { IBadmintonGatherComments } from "./badmintonGatherComment.types";
+import { IUser } from "./user.types";
+
 export interface IBadmintonGather {
   id: string;
   userId: string;
@@ -19,7 +22,12 @@ export interface IBadmintonGather {
   constPerFemale: number;
   priceNegotiable: number;
   imgCourt: string;
-  level: string;
+  level: ILevel;
+  user?: IUser;
+  badmintonGatherComments?: IBadmintonGatherComments[]
   createdAt: string;
   updatedAt: string;
 }
+
+
+export type ILevel = 'Y' | 'TB_Y' | 'TB' | 'TB_K' | 'K' | 'CN'

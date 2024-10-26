@@ -3,7 +3,16 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../lib/store';
 import { IBaseQuery } from '../../../types/query.types';
 import { IUserBookingDetail } from '../../../types/userBooking.types';
-import { Button, Empty, Modal, notification, Spin, Table, TableProps, Tooltip } from 'antd';
+import {
+  Button,
+  Empty,
+  Modal,
+  notification,
+  Spin,
+  Table,
+  TableProps,
+  Tooltip,
+} from 'antd';
 import { userBookingService } from '../../../services';
 import BaseSearch from '../../../components/base/BaseSearch';
 import Visibility from '../../../components/base/visibility';
@@ -65,22 +74,15 @@ export default function ListCourtBooking() {
         transform: 'translateY(-50%)',
       },
       onOk: async () => {
-        try {
-          const rs = await userBookingService.cancelUserBooking(_record.id)
-          notification.success({
-            message: 'Thành công',
-            description: rs.message,
-          });
-          handleGetList();
-        } catch (error: any) {
-          notification.error({
-            message: 'Thất bại',
-            description: error.message,
-          });
-        }
+        const rs = await userBookingService.cancelUserBooking(_record.id);
+        notification.success({
+          message: 'Thành công',
+          description: rs.message,
+        });
+        handleGetList();
       },
     });
-  }
+  };
 
   const columns: TableProps<IUserBookingDetail>['columns'] = [
     {
@@ -177,7 +179,7 @@ export default function ListCourtBooking() {
         <Tooltip title="Hủy yêu cầu">
           <Button
             onClick={(e) => {
-              if(record.status === DEFINE_STATUS.CANCELED) {
+              if (record.status === DEFINE_STATUS.CANCELED) {
                 notification.error({
                   message: 'Thông báo',
                   description: 'Lịch đã bị hủy trước đó.',
@@ -185,7 +187,7 @@ export default function ListCourtBooking() {
                 return;
               }
               e.stopPropagation();
-              handleCancel(record)
+              handleCancel(record);
             }}
             variant="solid"
             style={{

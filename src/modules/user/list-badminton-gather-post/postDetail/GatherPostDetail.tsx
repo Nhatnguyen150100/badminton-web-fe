@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  badmintonGatherCommentService,
   badmintonGatherService,
   gatherBookingService,
 } from '../../../../services';
@@ -70,12 +71,27 @@ export default function GatherPostDetail() {
   };
 
   const handleComment = async () => {
-    try {
-      
-    } catch (error) {
-      
+    if (!(user.id && gatherDetail?.id)) {
+      message.error('Vui lòng đăng nhập để bình luận.');
+      return;
     }
-  }
+    if (!comment) {
+      message.error('Vui lòng nhập nội dung bình luận.');
+      return;
+    }
+    try {
+      const rs =
+        await badmintonGatherCommentService.createBadmintonGatherComment({
+          userId: user.id,
+          badmintonGatherId: gatherDetail?.id,
+          comment,
+        });
+      toast.success(rs.message);
+      handleGetCourtDetail();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
 
   React.useEffect(() => {
     if (id) handleGetCourtDetail();
@@ -272,24 +288,27 @@ export default function GatherPostDetail() {
             gatherDetail?.badmintonGatherComments?.length && gatherDetail,
           )}
         >
-          <div className="flex flex-col justify-start items-start space-y-4">
+          <div className="flex flex-col justify-start items-start space-y-4 w-full mb-5">
             {gatherDetail?.badmintonGatherComments?.map((item) => {
               return (
                 <div
                   key={item.id}
-                  className="flex flex-row justify-between items-start space-x-4"
+                  className="flex flex-row justify-between items-start space-x-3"
                 >
-                  <div className="flex flex-row items-center space-x-2">
-                    <img
-                      className="h-[46px] rounded-[50%]"
-                      alt="user"
-                      src={`/images/users/${item.userId}.jpg`}
-                    />
-                    <span>{item.user?.fullName ?? item.user?.email}</span>
-                  </div>
-                  <span>{formatDate(item.createdAt)}</span>
-                  <div className="flex flex-row items-center space-x-2">
-                    <span>{item.comment}</span>
+                  <img
+                    crossOrigin="anonymous"
+                    className="h-[56px] w-[56px] rounded-[50%]"
+                    alt="user"
+                    src={item.user?.avatar ?? ''}
+                  />
+                  <div className="flex flex-col items-start justify-start space-y-1">
+                    <span className="text-lg font-semibold">
+                      {item.user?.fullName ?? item.user?.email}{' '}
+                      <span className="text-sm font-thin">
+                        ({formatDate(item.createdAt)})
+                      </span>
+                    </span>
+                    <p>{item.comment}</p>
                   </div>
                 </div>
               );
@@ -300,14 +319,19 @@ export default function GatherPostDetail() {
       <div className="w-full flex flex-col justify-start items-end space-y-3">
         <TextArea
           rows={3}
-          className='w-full p-3'
-          placeholder='Nhập để bình luận'
+          className="w-full p-3"
+          placeholder="Nhập để bình luận"
           value={comment}
           onChange={(e) => {
             setComment(e.target.value);
           }}
         />
-        <Button type='primary' variant='filled' className='h-[40px] min-w-[280px]' onClick={handleComment}>
+        <Button
+          type="primary"
+          variant="filled"
+          className="h-[40px] min-w-[280px]"
+          onClick={handleComment}
+        >
           Bình luận
         </Button>
       </div>

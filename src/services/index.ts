@@ -1,5 +1,7 @@
 import AuthService from './authService';
 import BadmintonCourtService from './badmintonCourtService';
+import BadmintonGatherBookingService from './badmintonGatherBookingService';
+import BadmintonGatherCommentService from './badmintonGatherComment';
 import BadmintonGatherService from './badmintonGatherService';
 import CourtNumberService from './courtNumberService';
 import GatherBookingService from './gatherBookingService';
@@ -17,3 +19,7 @@ export const scheduleService = new ScheduleService();
 export const userBookingService = new UserBookingService();
 export const badmintonGatherService = new BadmintonGatherService();
 export const gatherBookingService = new GatherBookingService();
+export const badmintonGatherBookingService =
+  new BadmintonGatherBookingService();
+export const badmintonGatherCommentService =
+  new BadmintonGatherCommentService();

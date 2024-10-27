@@ -57,6 +57,10 @@ export default function TheHeader() {
     navigate(DEFINE_ROUTERS_USER.userBooking);
   };
 
+  const handleNavigateGatherBooking = () => {
+    navigate(DEFINE_ROUTERS_USER.gatherBooking);
+  };
+
   const contentPopover = useMemo((): React.ReactNode => {
     return (
       <>
@@ -97,6 +101,15 @@ export default function TheHeader() {
             onClick={handleNavigateUserBooking}
           >
             <InfoCircleOutlined /> Sân đã thuê
+          </Button>
+          <Divider variant="solid" className="my-2" />
+          <Button
+            variant="text"
+            color="default"
+            className="text-md text-gray-800 w-full flex justify-start font-medium border-none"
+            onClick={handleNavigateGatherBooking}
+          >
+            <InfoCircleOutlined /> Lịch giao lưu đã đăng kí
           </Button>
           <Divider variant="solid" className="my-2" />
           <Button

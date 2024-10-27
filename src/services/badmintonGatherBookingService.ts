@@ -1,6 +1,9 @@
 import axiosRequest from '../plugins/request';
 import { IBadmintonGather } from '../types/badmintonGather.types';
-import { IBadmintonGatherBookingOwner } from '../types/badmintonGatherBooking.types';
+import {
+  IBadmintonGatherBookingOwner,
+  IBadmintonGatherBookingUser,
+} from '../types/badmintonGatherBooking.types';
 import { IBaseQuery } from '../types/query.types';
 import { IBaseResponse, IBaseResponseList } from '../types/response.types';
 import onRemoveParams from '../utils/functions/on-remove-params';
@@ -25,7 +28,7 @@ class BadmintonGatherBookingService {
   public async getBadmintonGatherBookingByUser(
     id: string,
     query: IBaseQuery,
-  ): Promise<IBaseResponse<IBaseResponseList<IBadmintonGatherBookingOwner[]>>> {
+  ): Promise<IBaseResponse<IBaseResponseList<IBadmintonGatherBookingUser[]>>> {
     try {
       const rs = await axiosRequest.get(`${this._prefixURL}/by-user/${id}`, {
         params: onRemoveParams(query),

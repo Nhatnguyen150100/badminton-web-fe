@@ -16,6 +16,7 @@ const DEFINE_ROUTERS_USER = {
   newBadmintonGather: '/new-badminton-gather',
   listGatherPost: '/gather-post',
   userBooking: '/my-booking',
+  gatherBooking: '/gather-booking',
 };
 
 export { DEFINE_ROUTERS_ADMIN, DEFINE_ROUTERS_USER };

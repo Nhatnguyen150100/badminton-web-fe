@@ -2,12 +2,24 @@ import * as React from 'react';
 import { IBadmintonCourt } from '../../../types/badmintonCourt.types';
 import { IBaseQuery } from '../../../types/query.types';
 import Visibility from '../../../components/base/visibility';
-import { Button, Empty, message, Select, Spin } from 'antd';
+import {
+  Button,
+  DatePicker,
+  Empty,
+  message,
+  Select,
+  Spin,
+  TimePicker,
+} from 'antd';
 import {
   badmintonCourtService,
   badmintonGatherService,
 } from '../../../services';
-import { CompassOutlined, InfoOutlined } from '@ant-design/icons';
+import {
+  CompassOutlined,
+  FilterOutlined,
+  InfoOutlined,
+} from '@ant-design/icons';
 import {
   onGetDistrictName,
   onGetWardName,
@@ -20,6 +32,43 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../lib/store';
 import { IBadmintonGather } from '../../../types/badmintonGather.types';
 import { DEFINE_ROUTERS_USER } from '../../../constants/routers-mapper';
+import { formatCurrencyVND } from '../../../utils/functions/format-money';
+import { DEFINE_GATHER_LEVEL_ARRAY } from '../../../constants/level-gather';
+import { FORMAT_TIME } from '../../../constants/time';
+import dayjs from 'dayjs';
+import BaseModal from '../../../components/base/BaseModal';
+
+const DEFINE_PRICE_FILTER = [
+  {
+    label: 'Nhỏ hơn 40k',
+    value: 40000,
+  },
+  {
+    label: 'Nhỏ hơn 50k',
+    value: 50000,
+  },
+
+  {
+    label: 'Nhỏ hơn 60k',
+    value: 60000,
+  },
+  {
+    label: 'Nhỏ hơn 80k',
+    value: 80000,
+  },
+  {
+    label: 'Nhỏ hơn 100k',
+    value: 100000,
+  },
+  {
+    label: 'Nhỏ hơn 150k',
+    value: 150000,
+  },
+  {
+    label: 'Nhỏ hơn 200k',
+    value: 200000,
+  },
+];
 
 export default function ListBadmintonGatherPost() {
   const user = useSelector((state: IRootState) => state.user);
@@ -29,7 +78,10 @@ export default function ListBadmintonGatherPost() {
   const [query, setQuery] = React.useState<IBaseQuery>({
     limit: 5,
     page: 1,
+    sortBy: 'createdAt',
   });
+
+  const [openModalFilter, setOpenModalFilter] = React.useState<boolean>(false);
 
   const handleGetList = async () => {
     try {
@@ -79,49 +131,151 @@ export default function ListBadmintonGatherPost() {
   return (
     <>
       <div className="flex flex-row justify-between items-center mb-5 w-full">
-        <div className="space-x-3">
-          <Select
-            className="min-w-[120px]"
-            placeholder="Lọc theo quận/huyện"
-            allowClear
-            onClear={() => {
-              setQuery(
-                (pre) => ({ ...pre, ward: null } as unknown as IBaseQuery),
-              );
-            }}
-            value={query.district}
-            onChange={(value) =>
-              setQuery((pre) => ({ ...pre, district: value }))
-            }
-          >
-            {districtData.map((district) => (
-              <Select.Option key={district.value} value={district.value}>
-                {district.label}
-              </Select.Option>
-            ))}
-          </Select>
-          <Select
-            className="min-w-[120px]"
-            disabled={!query?.district}
-            placeholder="Lọc theo phường/xã"
-            allowClear
-            onChange={(value) => setQuery((pre) => ({ ...pre, ward: value }))}
-            value={query.ward}
-          >
-            {wardData!.map((ward) => (
-              <Select.Option key={ward.value} value={ward.value}>
-                {ward.label}
-              </Select.Option>
-            ))}
-          </Select>
-        </div>
         <Button
-          type="primary"
-          className="min-w-[120px]"
-          onClick={handleGetList}
+          icon={<FilterOutlined />}
+          onClick={() => {
+            setOpenModalFilter(true);
+          }}
         >
-          Tìm kiếm
+          Bộ lọc
         </Button>
+        <BaseModal
+          isOpen={openModalFilter}
+          title="Bộ lọc bài đăng giao lưu"
+          footer={
+            <div className="flex flex-row w-full justify-end items-center">
+              <Button
+                type="primary"
+                className="min-w-[120px]"
+                onClick={() => {
+                  handleGetList();
+                  setOpenModalFilter(false);
+                }}
+              >
+                Tìm kiếm
+              </Button>
+            </div>
+          }
+          handleClose={() => {
+            setOpenModalFilter(false);
+          }}
+        >
+          <div className="grid grid-cols-2 gap-5">
+            <Select
+              options={[
+                { label: 'Ngày tạo mới nhất', value: 'createdAt' },
+                { label: 'Sắp diễn ra', value: 'appointmentDate' },
+              ]}
+              value={query.sortBy}
+              onChange={(value) => {
+                setQuery((pre) => ({ ...pre, sortBy: value }));
+              }}
+              placeholder="Lọc theo ngày"
+            />
+            <Select
+              className="min-w-[120px]"
+              placeholder="Lọc theo quận/huyện"
+              allowClear
+              onClear={() => {
+                setQuery(
+                  (pre) => ({ ...pre, ward: null } as unknown as IBaseQuery),
+                );
+              }}
+              value={query.district}
+              onChange={(value) =>
+                setQuery((pre) => ({ ...pre, district: value }))
+              }
+            >
+              {districtData.map((district) => (
+                <Select.Option key={district.value} value={district.value}>
+                  {district.label}
+                </Select.Option>
+              ))}
+            </Select>
+            <Select
+              className="min-w-[120px]"
+              disabled={!query?.district}
+              placeholder="Lọc theo phường/xã"
+              allowClear
+              onChange={(value) => setQuery((pre) => ({ ...pre, ward: value }))}
+              value={query.ward}
+            >
+              {wardData!.map((ward) => (
+                <Select.Option key={ward.value} value={ward.value}>
+                  {ward.label}
+                </Select.Option>
+              ))}
+            </Select>
+            <Select
+              allowClear
+              placeholder="Lọc theo trình độ cần tuyển"
+              value={query.level}
+              onChange={(value) =>
+                setQuery((pre) => ({ ...pre, level: value }))
+              }
+              options={DEFINE_GATHER_LEVEL_ARRAY}
+            />
+            <Select
+              allowClear
+              className="min-w-[160px]"
+              placeholder="Lọc theo giá"
+              value={query.price}
+              onChange={(value) =>
+                setQuery((pre) => ({ ...pre, price: value }))
+              }
+              options={DEFINE_PRICE_FILTER}
+            />
+            <TimePicker
+              className="min-w-[160px]"
+              value={
+                query.startTime ? dayjs(query.startTime, FORMAT_TIME) : null
+              }
+              onChange={(value) =>
+                setQuery((pre) => ({
+                  ...pre,
+                  startTime: value ? dayjs(value).format(FORMAT_TIME) : value,
+                }))
+              }
+              format={FORMAT_TIME}
+              placeholder="Thời gian bắt đầu"
+            />
+            <Select
+              placeholder="Lọc theo giới tính"
+              allowClear
+              value={query.gender}
+              onChange={(value) =>
+                setQuery((pre) => ({ ...pre, gender: value }))
+              }
+              options={[
+                {
+                  label: 'Chỉ nam',
+                  value: 'Male',
+                },
+                {
+                  label: 'Chỉ nữ',
+                  value: 'Female',
+                },
+                {
+                  label: 'Cả nam và nữ',
+                  value: 'ALL',
+                },
+              ]}
+            />
+            <DatePicker
+              format={'DD/MM/YYYY'}
+              placeholder="Tìm ngày cụ thể"
+              value={
+                query.appointmentDate ? dayjs(query.appointmentDate) : null
+              }
+              onChange={(value) =>
+                setQuery((pre) => ({
+                  ...pre,
+                  appointmentDate: value ? dayjs(value) : value,
+                }))
+              }
+            />
+          </div>
+        </BaseModal>
       </div>
       <div
         className={`h-[calc(100vh-230px)] grid gap-x-3 ${
@@ -138,7 +292,9 @@ export default function ListBadmintonGatherPost() {
                 key={gather.id}
                 onClick={() => {
                   if (!user.id) {
-                    message.error('Vui lòng đăng nhập để xem thông tin chi tiết');
+                    message.error(
+                      'Vui lòng đăng nhập để xem thông tin chi tiết',
+                    );
                     return;
                   }
                   navigate(
@@ -148,13 +304,27 @@ export default function ListBadmintonGatherPost() {
                     ),
                   );
                 }}
-                className="flex flex-row justify-start items-center rounded-2xl shadow-xl p-5 space-x-5 cursor-pointer border border-solid hover:border-dashed hover:border hover:border-blue-500"
+                className="flex flex-row justify-start items-start rounded-2xl shadow-xl p-5 space-x-5 cursor-pointer border border-solid hover:border-dashed hover:border hover:border-blue-500"
               >
-                <img
-                  className="max-h-[120px] max-w-[260px] rounded-xl object-contain"
-                  src={gather.imgCourt}
-                  alt="Ảnh sân"
-                />
+                <div className="relative">
+                  <img
+                    className="h-full max-w-[260px] rounded-xl object-cover"
+                    src={gather.imgCourt}
+                    alt="Ảnh sân"
+                  />
+                  <div className="absolute py-1 px-2 top-1 right-1 bg-red-600 rounded-xl">
+                    <Visibility
+                      visibility={Boolean(gather.priceNegotiable)}
+                      suspenseComponent={
+                        <span className="text-white text-xs">{`Từ ${formatCurrencyVND(
+                          gather.constPerFemale,
+                        )}`}</span>
+                      }
+                    >
+                      <span className="text-white text-xs">Giá thỏa thuận</span>
+                    </Visibility>
+                  </div>
+                </div>
                 <div className="flex flex-col justify-start items-start space-y-1">
                   <h1 className="capitalize text-xl font-bold">
                     {gather.nameClub}

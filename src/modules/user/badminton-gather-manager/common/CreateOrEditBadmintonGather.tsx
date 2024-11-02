@@ -157,10 +157,10 @@ export default function CreateOrEditBadmintonGather({
     formData.append('startTime', dayjs(data.startTime).format(FORMAT_TIME));
     formData.append('endTime', dayjs(data.endTime).format(FORMAT_TIME));
     formData.append('appointmentDate', data.appointmentDate.toString());
-    formData.append('totalMale', data.totalMale?.toString());
-    formData.append('totalFemale', data.totalFemale?.toString());
-    formData.append('constPerMale', data.constPerMale?.toString());
-    formData.append('constPerFemale', data.constPerFemale?.toString());
+    formData.append('totalMale', data.totalMale?.toString() ?? 0);
+    formData.append('totalFemale', data.totalFemale?.toString() ?? 0);
+    formData.append('constPerMale', data.constPerMale?.toString() ?? 0);
+    formData.append('constPerFemale', data.constPerFemale?.toString() ?? 0);
     formData.append('priceNegotiable', priceNegotiable.toString());
     formData.append('level', data.level);
 
@@ -388,7 +388,6 @@ export default function CreateOrEditBadmintonGather({
 
             <Form.Item<FieldType>
               label="Chọn nam nữ thuê"
-              name="totalMale"
               rules={[
                 { required: true, message: 'Hãy nhập số lượng nam cần thuê' },
               ]}

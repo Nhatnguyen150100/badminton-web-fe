@@ -110,7 +110,7 @@ export default function GatherPostDetail() {
           alt="Ảnh sân cầu"
         />
         <h1 className="text-start font-bold text-2xl w-full uppercase mt-5">
-          Thông tin chi tiết sân cầu {gatherDetail?.badmintonCourtName}
+          {gatherDetail?.nameClub}
         </h1>
         <Divider variant="solid" className="border-[1px] border-gray-300" />
         <div className="w-full flex flex-col justify-start items-start space-y-4">

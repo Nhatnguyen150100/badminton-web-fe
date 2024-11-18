@@ -70,6 +70,11 @@ export default function ModalLogin() {
             placeholder="Email"
             className="mb-4"
             value={form.email}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHandleSubmit();
+              }
+            }}
             onChange={(e) => {
               setForm((pre) => ({
                 ...pre,
@@ -81,6 +86,11 @@ export default function ModalLogin() {
             type="password"
             placeholder="Password"
             className="mb-4"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHandleSubmit();
+              }
+            }}
             value={form.password}
             onChange={(e) => {
               setForm((pre) => ({
@@ -98,6 +108,20 @@ export default function ModalLogin() {
             >
               Đăng nhập
             </button>
+            <button
+              disabled={loading}
+              className="mb-3 bg-white inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal shadow-[0_4px_9px_-0px_rgba(0,0,0,0.2)] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)]"
+              type="button"
+              onClick={() => {
+                console.log("🚀 ~ ModalLogin ~ onClick:", `${import.meta.env.VITE_BASE_URL}/v1/auth/google`)
+                window.open(`${import.meta.env.VITE_BASE_URL}/v1/auth/google`, '_self');
+              }}
+            >
+              <div className="flex flex-row justify-center items-center space-x-5">
+                <img className="h-5 w-5" src="/icons/google.png" alt="google" />
+                <span className="text-black ">Đăng nhập bằng google</span>
+              </div>
+            </button>
           </div>
           <div className="flex items-center justify-between pb-6">
             <p className="mb-0 mr-2">Chưa có tài khoản?</p>
@@ -111,7 +135,7 @@ export default function ModalLogin() {
           </div>
         </form>
       </BaseModal>
-      <GeneralLoading isLoading={loading}/>
+      <GeneralLoading isLoading={loading} />
     </>
   );
 }

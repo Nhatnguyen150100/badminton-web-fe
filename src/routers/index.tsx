@@ -20,6 +20,7 @@ import BadmintonGatherDetail from '../modules/user/badminton-gather-manager/deta
 import ListBadmintonGatherPost from '../modules/user/list-badminton-gather-post/ListBookingGatherPost';
 import GatherPostDetail from '../modules/user/list-badminton-gather-post/postDetail/GatherPostDetail';
 import ListGatherBooking from '../modules/user/user-booking/ListGatherBooking';
+import LoginByGoogle from '../modules/auth/login/LoginByGoogle';
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
   {
     path: DEFINE_ROUTERS_ADMIN.loginAdmin,
     element: <LoginAdminPage />,
+  },
+  {
+    path: DEFINE_ROUTERS_USER.loginGoogle,
+    element: <LoginByGoogle />,
   },
 ]);
 

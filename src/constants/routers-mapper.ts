@@ -5,6 +5,7 @@ const DEFINE_ROUTERS_ADMIN = {
 
 const DEFINE_ROUTERS_USER = {
   home: '/',
+  loginGoogle: '/login-google',
   courtPostDetail: '/court-post/:id',
   gatherPostDetail: '/gather-post/:id',
   profile: '/profile',

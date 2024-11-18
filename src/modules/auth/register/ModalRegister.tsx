@@ -70,6 +70,11 @@ export default function ModalRegister() {
             type="text"
             placeholder="Email"
             className="mb-4"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHandleSubmit();
+              }
+            }}
             value={form.email}
             onChange={(e) => {
               setForm((pre) => ({
@@ -82,6 +87,11 @@ export default function ModalRegister() {
             type="password"
             placeholder="Password"
             className="mb-4"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHandleSubmit();
+              }
+            }}
             value={form.password}
             onChange={(e) => {
               setForm((pre) => ({
@@ -94,6 +104,11 @@ export default function ModalRegister() {
             type="password"
             placeholder="Confirm Password"
             className="mb-4"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onHandleSubmit();
+              }
+            }}
             value={form.confirmPassword}
             onChange={(e) => {
               setForm((pre) => ({

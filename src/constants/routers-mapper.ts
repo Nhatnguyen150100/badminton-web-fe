@@ -1,5 +1,7 @@
 const DEFINE_ROUTERS_ADMIN = {
   home: '/admin',
+  courtManager: '/admin/court-manager',
+  courtDetail: '/admin/court-detail/:id',
   loginAdmin: '/login-admin',
 };
 

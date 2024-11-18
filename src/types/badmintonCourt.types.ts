@@ -19,6 +19,7 @@ export interface IBadmintonCourt {
   status: IStatusLabel;
   createdAt: string;
   updatedAt: string;
+  totalCourtNumber?: number
 }
 
 export interface ILatLng {

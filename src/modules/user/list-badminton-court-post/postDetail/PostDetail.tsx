@@ -64,6 +64,12 @@ export default function PostDetail() {
             </h1>
           </div>
           <div className="flex flex-row justify-start items-end space-x-2">
+            <label className="text-lg">Tổng số sân cầu:</label>
+            <h1 className="text-lg font-bold">
+              {courtDetail?.totalCourtNumber}
+            </h1>
+          </div>
+          <div className="flex flex-row justify-start items-end space-x-2">
             <label className="text-lg">Số điện thoại chủ sân cầu:</label>
             <Tooltip title="Nhấn để gọi">
               <a

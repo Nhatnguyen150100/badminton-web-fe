@@ -21,6 +21,8 @@ import ListBadmintonGatherPost from '../modules/user/list-badminton-gather-post/
 import GatherPostDetail from '../modules/user/list-badminton-gather-post/postDetail/GatherPostDetail';
 import ListGatherBooking from '../modules/user/user-booking/ListGatherBooking';
 import LoginByGoogle from '../modules/auth/login/LoginByGoogle';
+import CourtDetail from '../modules/admin/CourtDetail';
+import TheLayoutAdmin from '../modules/admin/layout/TheLayoutAdmin';
 
 const router = createBrowserRouter([
   {
@@ -85,7 +87,17 @@ const router = createBrowserRouter([
   },
   {
     path: DEFINE_ROUTERS_ADMIN.home,
-    element: <AdminPage />,
+    Component: TheLayoutAdmin,
+    children: [
+      {
+        index: true,
+        element: <AdminPage />,
+      },
+      {
+        path: DEFINE_ROUTERS_ADMIN.courtDetail,
+        element: <CourtDetail />,
+      }
+    ]
   },
   {
     path: DEFINE_ROUTERS_ADMIN.loginAdmin,

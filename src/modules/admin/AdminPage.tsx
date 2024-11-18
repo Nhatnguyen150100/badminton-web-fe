@@ -1,14 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../lib/store';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { DEFINE_ROUTERS_ADMIN } from '../../constants/routers-mapper';
-import Sidebar from './SideBar';
 import {
   IBadmintonCourt,
   IQueryBadmintonCourtAdmin,
 } from '../../types/badmintonCourt.types';
-import { IBaseQuery } from '../../types/query.types';
 import {
   Button,
   Empty,
@@ -46,6 +44,7 @@ export default function AdminPage({}: Props) {
     limit: 5,
     page: 1,
   });
+  const navigate = useNavigate();
 
   if (!(user.id && user.role === 'ADMIN')) {
     return <Navigate to={DEFINE_ROUTERS_ADMIN.loginAdmin} replace />;
@@ -244,49 +243,53 @@ export default function AdminPage({}: Props) {
     }
   };
 
+  const handleClickRow = (record: IBadmintonCourt) => {
+    navigate(DEFINE_ROUTERS_ADMIN.courtDetail.replace(':id', record.id));
+  };
+
   React.useEffect(() => {
     if (user.id && !query.nameLike) handleGetList();
   }, [user.id, query.nameLike]);
 
   return (
-    <div className="h-full w-full flex flex-row">
-      <Sidebar />
-      <div className="w-full min-h-[320px] flex flex-col justify-start items-start space-y-5 p-12">
-        <BaseSearch
-          value={query.nameLike!}
-          placeholder="Nhập để tìm kiếm"
-          onHandleChange={(value) => {
-            setQuery({ ...query, nameLike: value });
-          }}
-          onSearch={() => handleGetList()}
-        />
-        <Visibility
-          visibility={Boolean(listCourt.length)}
-          suspenseComponent={loading ? <Spin /> : <Empty />}
-        >
-          <div className="w-full">
-            <Table<IBadmintonCourt>
-              rowKey="id"
-              columns={columns}
-              className="cursor-pointer"
-              dataSource={listCourt}
-              pagination={{
-                current: query.page,
-                pageSize: query.limit,
-                total: query.total ?? 0,
-                onChange: (page, limit) => {
-                  setQuery((pre) => ({
-                    ...pre,
-                    page,
-                    limit,
-                  }));
-                  handleGetList();
-                },
-              }}
-            />
-          </div>
-        </Visibility>
-      </div>
+    <div className="w-full min-h-[320px] flex flex-col justify-start items-start space-y-5">
+      <BaseSearch
+        value={query.nameLike!}
+        placeholder="Nhập để tìm kiếm"
+        onHandleChange={(value) => {
+          setQuery({ ...query, nameLike: value });
+        }}
+        onSearch={() => handleGetList()}
+      />
+      <Visibility
+        visibility={Boolean(listCourt.length)}
+        suspenseComponent={loading ? <Spin /> : <Empty />}
+      >
+        <div className="w-full">
+          <Table<IBadmintonCourt>
+            rowKey="id"
+            columns={columns}
+            className="cursor-pointer"
+            onRow={(record) => ({
+              onClick: () => handleClickRow(record),
+            })}
+            dataSource={listCourt}
+            pagination={{
+              current: query.page,
+              pageSize: query.limit,
+              total: query.total ?? 0,
+              onChange: (page, limit) => {
+                setQuery((pre) => ({
+                  ...pre,
+                  page,
+                  limit,
+                }));
+                handleGetList();
+              },
+            }}
+          />
+        </div>
+      </Visibility>
     </div>
   );
 }

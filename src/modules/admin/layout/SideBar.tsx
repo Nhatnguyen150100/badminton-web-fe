@@ -18,6 +18,11 @@ const Sidebar = () => {
       label: 'Quản lý sân',
       icon: <PieChartOutlined />,
     },
+    {
+      path: DEFINE_ROUTERS_ADMIN.accountBalance,
+      label: 'Số dư tài khoản chiết khấu',
+      icon: <PieChartOutlined />,
+    },
   ];
 
   const handleLogOut = () => {
@@ -27,6 +32,7 @@ const Sidebar = () => {
         fullName: null,
         gender: null,
         phoneNumber: null,
+        accountBalance: 0,
         email: '',
         role: 'ADMIN',
         createdAt: '',
@@ -45,7 +51,7 @@ const Sidebar = () => {
       </div>
       <div className="flex flex-col mt-4 px-3">
         {menuItems.map((item) => {
-          const isActive = isChildUrl(item.path, location.pathname);
+          const isActive = item.path === location.pathname;
           return (
             <Link
               key={item.path}

@@ -16,4 +16,5 @@ export interface IResponseLogin {
   createdAt: string;
   updatedAt: string;
   accessToken: string;
+  accountBalance: number;
 }

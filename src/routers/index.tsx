@@ -23,6 +23,7 @@ import ListGatherBooking from '../modules/user/user-booking/ListGatherBooking';
 import LoginByGoogle from '../modules/auth/login/LoginByGoogle';
 import CourtDetail from '../modules/admin/CourtDetail';
 import TheLayoutAdmin from '../modules/admin/layout/TheLayoutAdmin';
+import AccountBalanceAdmin from '../modules/admin/AccountBalanceAdmin';
 
 const router = createBrowserRouter([
   {
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
       {
         path: DEFINE_ROUTERS_ADMIN.courtDetail,
         element: <CourtDetail />,
+      },
+      {
+        path: DEFINE_ROUTERS_ADMIN.accountBalance,
+        element: <AccountBalanceAdmin />,
       }
     ]
   },

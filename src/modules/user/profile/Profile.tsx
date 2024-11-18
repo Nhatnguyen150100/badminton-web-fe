@@ -1,7 +1,15 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../../lib/store';
-import { Button, DatePicker, Form, FormProps, Input, Radio } from 'antd';
+import {
+  Button,
+  DatePicker,
+  Form,
+  FormProps,
+  Input,
+  InputNumber,
+  Radio,
+} from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import GeneralLoading from '../../../components/base/GeneralLoading';
 import { profileService } from '../../../services';
@@ -9,12 +17,14 @@ import { toast } from 'react-toastify';
 import { setUser } from '../../../lib/reducer/userSlice';
 import AvatarUpload from '../../../components/common/AvatarUpload';
 import { useNavigate } from 'react-router-dom';
+import { formatter, parser } from '../../../utils/input-format-money';
 
 type FieldType = {
   email: string;
   fullName?: string;
   gender?: string;
   phoneNumber?: number;
+  accountBalance?: number;
 };
 
 export default function Profile() {
@@ -23,9 +33,10 @@ export default function Profile() {
   const user = useSelector((state: IRootState) => state.user);
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
-  const [currentAvatar, setCurrentAvatar] = React.useState<string | null>(user?.avatar);
+  const [currentAvatar, setCurrentAvatar] = React.useState<string | null>(
+    user?.avatar,
+  );
   const navigate = useNavigate();
-
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const data = { ...values };
@@ -36,6 +47,7 @@ export default function Profile() {
       formData.append('fullName', data.fullName!);
       formData.append('gender', data.gender!);
       formData.append('phoneNumber', data.phoneNumber!.toString());
+      formData.append('accountBalance', data.accountBalance!.toString());
       const rs = await profileService.updateProfile(user.id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -68,6 +80,7 @@ export default function Profile() {
           fullName: user.fullName,
           gender: user.gender ?? 'Male',
           phoneNumber: user.phoneNumber,
+          accountBalance: user.accountBalance,
         }}
         autoComplete="off"
       >
@@ -112,6 +125,20 @@ export default function Profile() {
           rules={[{ required: true, message: 'Please input phone number' }]}
         >
           <Input type="number" />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label="Số dư tài khoản"
+          name="accountBalance"
+          rules={[
+            { required: true, message: 'Hãy nhập số tiền có trong tài khoản' },
+          ]}
+        >
+          <InputNumber
+            className="w-full"
+            formatter={formatter}
+            parser={parser}
+          />
         </Form.Item>
 
         <div className="w-full flex justify-end items-end">

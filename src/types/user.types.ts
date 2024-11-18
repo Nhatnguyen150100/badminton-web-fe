@@ -6,6 +6,7 @@ export interface IUser {
   phoneNumber: number | null;
   email: string;
   role: IRole;
+  accountBalance: number | null;
   createdAt: string;
   updatedAt: string;
 }

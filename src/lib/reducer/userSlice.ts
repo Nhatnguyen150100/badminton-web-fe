@@ -7,10 +7,12 @@ const initialState: IUser = {
   fullName: null,
   gender: null,
   phoneNumber: null,
+  accountBalance: 0,
   email: '',
   role: 'USER',
   createdAt: '',
   updatedAt: '',
+  avatar: null
 };
 
 export const userSlice = createSlice({

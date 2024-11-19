@@ -5,6 +5,7 @@ import { setUser } from '../../../lib/reducer/userSlice';
 import { IRole } from '../../../types/user.types';
 import { DEFINE_ROUTERS_USER } from '../../../constants/routers-mapper';
 import { setModalActive } from '../../../lib/reducer/generalSlice';
+import cookiesStore from '../../../plugins/cookiesStore';
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -29,7 +30,7 @@ export default function LoginByGoogle() {
   const accessToken = query.get('accessToken');
 
   useEffect(() => {
-    if (isSuccess === 'success' && id && email) {
+    if (isSuccess === 'success' && id && email && accessToken) {
       dispatch(
         setUser({
           id,
@@ -46,6 +47,7 @@ export default function LoginByGoogle() {
       );
       dispatch(setModalActive(null));
       navigate(DEFINE_ROUTERS_USER.home);
+      cookiesStore.set('access_token', accessToken);
     }
   }, [
     isSuccess,

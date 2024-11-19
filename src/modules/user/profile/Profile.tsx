@@ -9,6 +9,7 @@ import {
   Input,
   InputNumber,
   Radio,
+  Spin,
 } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import GeneralLoading from '../../../components/base/GeneralLoading';
@@ -18,6 +19,7 @@ import { setUser } from '../../../lib/reducer/userSlice';
 import AvatarUpload from '../../../components/common/AvatarUpload';
 import { useNavigate } from 'react-router-dom';
 import { formatter, parser } from '../../../utils/input-format-money';
+import { IUser } from '../../../types/user.types';
 
 type FieldType = {
   email: string;
@@ -31,12 +33,26 @@ export default function Profile() {
   const [file, setFile] = React.useState<File>();
   const [form] = Form.useForm();
   const user = useSelector((state: IRootState) => state.user);
+  const [userInfo, setUserInfo] = React.useState<IUser>();
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
-  const [currentAvatar, setCurrentAvatar] = React.useState<string | null>(
-    user?.avatar,
-  );
+  const [currentAvatar, setCurrentAvatar] = React.useState<string | null>();
   const navigate = useNavigate();
+
+  const handleGetProfile = async () => {
+    try {
+      setLoading(true);
+      const rs = await profileService.getProfile(user.id);
+      setUserInfo(rs.data);
+      setCurrentAvatar(rs.data.avatar);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (user.id) handleGetProfile();
+  }, [user.id]);
 
   const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
     const data = { ...values };
@@ -66,6 +82,13 @@ export default function Profile() {
     setCurrentAvatar(null);
   };
 
+  if (!userInfo?.id)
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Spin />
+      </div>
+    );
+
   return (
     <div className="p-10 rounded-2xl border-[2px] border-blue-500 border-dotted flex flex-col justify-center items-start w-full">
       <Form
@@ -76,17 +99,17 @@ export default function Profile() {
         name="form"
         onFinish={onFinish}
         initialValues={{
-          email: user.email,
-          fullName: user.fullName,
-          gender: user.gender ?? 'Male',
-          phoneNumber: user.phoneNumber,
-          accountBalance: user.accountBalance,
+          email: userInfo?.email,
+          fullName: userInfo?.fullName,
+          gender: userInfo?.gender ?? 'Male',
+          phoneNumber: userInfo?.phoneNumber,
+          accountBalance: userInfo?.accountBalance,
         }}
         autoComplete="off"
       >
         <Form.Item<any> label="Ảnh đại diện">
           <AvatarUpload
-            avatar={currentAvatar}
+            avatar={currentAvatar ?? null}
             file={file}
             handleUploadFile={handleUploadFile}
           />

@@ -204,6 +204,7 @@ export default function UserBookingTab({ id }: IProps) {
                   e.stopPropagation();
                   handleChangStatus(DEFINE_STATUS.ACCEPTED, record);
                 }}
+                // disabled={record.status !== DEFINE_STATUS.PENDING_APPROVAL}
                 variant="solid"
                 style={{
                   color: 'white',
@@ -221,6 +222,7 @@ export default function UserBookingTab({ id }: IProps) {
                   e.stopPropagation();
                   handleChangStatus(DEFINE_STATUS.DENIED, record);
                 }}
+                // disabled={record.status !== DEFINE_STATUS.PENDING_APPROVAL}
                 variant="solid"
                 color="danger"
                 shape="default"

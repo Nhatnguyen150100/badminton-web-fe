@@ -100,6 +100,10 @@ export default function SchedulePostTable({ id, userId }: IProps) {
       toast.error('Bạn không thể đặt lịch cho chính bạn!');
       return;
     }
+    if((user.accountBalance ?? 0) < record.constBooking) {
+      toast.error('Số dư tiền của bạn không đủ để đặt lịch. Hãy nạp thêm tiền');
+      return;
+    }
     setScheduleBooking(record);
     setIsOpenModal(true);
   };

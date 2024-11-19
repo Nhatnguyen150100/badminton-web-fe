@@ -104,7 +104,7 @@ export default function ScheduleForm({
             name="appointmentDate"
             rules={[{ required: true, message: 'Hãy nhập ngày cho thuê' }]}
           >
-            <DatePicker format={'DD/MM/YYYY'} />
+            <DatePicker format={'DD/MM/YYYY'} minDate={dayjs().add(1, 'day')}/>
           </Form.Item>
 
           <div className="w-full flex justify-end items-end my-5">

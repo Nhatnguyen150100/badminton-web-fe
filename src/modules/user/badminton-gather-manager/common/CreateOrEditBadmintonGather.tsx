@@ -68,9 +68,6 @@ export default function CreateOrEditBadmintonGather({
   const [peopleType, setPeopleType] = React.useState<'MALE' | 'FEMALE' | 'ALL'>(
     'ALL',
   );
-  const [priceNegotiable, setPriceNegotiable] = React.useState<boolean>(
-    Boolean(badmintonGather?.priceNegotiable),
-  );
   const user = useSelector((state: IRootState) => state.user);
   const [file, setFile] = React.useState<File>();
   const [currentImg, setCurrentImg] = React.useState<string | null>(
@@ -161,7 +158,6 @@ export default function CreateOrEditBadmintonGather({
     formData.append('totalFemale', data.totalFemale?.toString() ?? 0);
     formData.append('constPerMale', data.constPerMale?.toString() ?? 0);
     formData.append('constPerFemale', data.constPerFemale?.toString() ?? 0);
-    formData.append('priceNegotiable', priceNegotiable.toString());
     formData.append('level', data.level);
 
     if (file) formData.append('imgCourt', file);
@@ -340,6 +336,7 @@ export default function CreateOrEditBadmintonGather({
                 disabled={Boolean(selectedScheduleId)}
                 className="w-full"
                 format={'DD/MM/YYYY'}
+                minDate={dayjs()}
               />
             </Form.Item>
 
@@ -417,7 +414,7 @@ export default function CreateOrEditBadmintonGather({
                 className="w-full"
                 formatter={formatter}
                 parser={parser}
-                disabled={peopleType === 'FEMALE' || priceNegotiable}
+                disabled={peopleType === 'FEMALE'}
               />
             </Form.Item>
 
@@ -426,21 +423,8 @@ export default function CreateOrEditBadmintonGather({
                 className="w-full"
                 formatter={formatter}
                 parser={parser}
-                disabled={peopleType === 'MALE' || priceNegotiable}
+                disabled={peopleType === 'MALE'}
               />
-            </Form.Item>
-
-            <Form.Item<FieldType> label="Giá cả">
-              <Checkbox
-                checked={priceNegotiable}
-                onChange={(e) => {
-                  setPriceNegotiable(e.target.checked as boolean);
-                  form.setFieldValue('constPerMale', undefined);
-                  form.setFieldValue('constPerFemale', undefined);
-                }}
-              >
-                Giá cả thỏa thuận
-              </Checkbox>
             </Form.Item>
 
             <Form.Item<FieldType>

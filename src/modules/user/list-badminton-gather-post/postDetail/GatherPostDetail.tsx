@@ -55,6 +55,14 @@ export default function GatherPostDetail() {
       message.error('Vui lòng đăng nhập để đặt lịch.');
       return;
     }
+    const isEnoughMoneyToPay =
+      (numberFemale ?? 0) * (gatherDetail?.constPerFemale ?? 0) +
+        (numberMale ?? 0) * (gatherDetail?.constPerMale ?? 0) <=
+      (user.accountBalance ?? 0);
+    if (!isEnoughMoneyToPay) {
+      message.error('Bạn không đủ tiền để đặt lịch.');
+      return;
+    }
     try {
       const rs = await gatherBookingService.createGatherBooking({
         badmintonGatherId: gatherDetail?.id,
@@ -233,14 +241,6 @@ export default function GatherPostDetail() {
               </span>
             </div>
           </Visibility>
-          <Visibility visibility={Boolean(gatherDetail?.priceNegotiable)}>
-            <div className="flex flex-row justify-start items-center space-x-4">
-              <div className="flex flex-row items-center space-x-2">
-                <img className="h-[26px]" alt="money" src="/icons/money.png" />
-                <label className="text-lg">Giá thuê thỏa thuận</label>
-              </div>
-            </div>
-          </Visibility>
           <div className="flex flex-row justify-start items-center space-x-4">
             <div className="flex flex-row items-center space-x-2">
               <img className="h-[26px]" alt="level" src="/icons/level.png" />
@@ -251,6 +251,12 @@ export default function GatherPostDetail() {
             </span>
           </div>
         </div>
+        <Visibility visibility={!(gatherDetail?.totalMale === 0 || gatherDetail?.totalFemale === 0)} suspenseComponent={
+          <div className='py-2 px-5 min-w-[520px] rounded-lg bg-red-600 text-white text-center cursor-not-allowed'>
+            Số lượng người đăng kí đã đủ. Không nhận đăng kí thêm
+          </div>
+        }>
+
         <Button
           type="primary"
           variant="filled"
@@ -265,6 +271,7 @@ export default function GatherPostDetail() {
         >
           Đăng kí tham gia
         </Button>
+        </Visibility>
         <h1 className="text-start font-bold text-2xl w-full uppercase mt-5">
           Vị trí sân cầu {gatherDetail?.badmintonCourtName} trên bản đồ
         </h1>

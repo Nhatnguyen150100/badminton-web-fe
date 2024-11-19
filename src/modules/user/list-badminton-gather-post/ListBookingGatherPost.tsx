@@ -313,16 +313,9 @@ export default function ListBadmintonGatherPost() {
                     alt="Ảnh sân"
                   />
                   <div className="absolute py-1 px-2 top-1 right-1 bg-red-600 rounded-xl">
-                    <Visibility
-                      visibility={Boolean(gather.priceNegotiable)}
-                      suspenseComponent={
-                        <span className="text-white text-xs">{`Từ ${formatCurrencyVND(
-                          gather.constPerFemale,
-                        )}`}</span>
-                      }
-                    >
-                      <span className="text-white text-xs">Giá thỏa thuận</span>
-                    </Visibility>
+                    <span className="text-white text-xs">{`Từ ${formatCurrencyVND(
+                      gather.constPerFemale,
+                    )}`}</span>
                   </div>
                 </div>
                 <div className="flex flex-col justify-start items-start space-y-1">
